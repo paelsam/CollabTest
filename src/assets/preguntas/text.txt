@@ -1,5 +1,5 @@
 pregunta ,descripcion,A,B,C,D,R,
-cual es el error?,"public static String leerArchivo(String rutaArchivo) throws IOException {
+cual es el error?,public static String leerArchivo(String rutaArchivo) throws IOException {
         StringBuilder contenido = new StringBuilder();
         try (BufferedReader br = new BufferedReader(new FileReader(rutaArchivo))) {
             String linea;
@@ -8,7 +8,7 @@ cual es el error?,"public static String leerArchivo(String rutaArchivo) throws I
             }
         }
         return contenido.toString();
-    }",me cago en la leche,mejor no hagas nada,2200,what the fuck,mejor no hagas nada,
+    },me cago en la leche,mejor no hagas nada,2200,what the fuck,mejor no hagas nada,
 cual es el inventor de el calculo?,no tiene descripcion,isac newton,gauss,nicola tesla,alber ainstain,isacnewton,
 cual es el error en el siguiente codigo?,public static void main(String[] args) {
         String rutaArchivo = "ruta_del_archivo.txt";  // Reemplaza con la ruta de tu archivo

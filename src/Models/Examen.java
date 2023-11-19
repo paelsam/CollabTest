@@ -13,21 +13,21 @@ public class Examen {
     private int tiempoDuracion; // en minutos
     private List<String> listaIntegrantes;
     private float notaFinal;
-    int contador = 0;
-    String[] datos;
-    ArrayList<String> aux;
-    public ArrayList<ArrayList<String>> listaPreguntas;
-    public ArrayList<Pregunta> preguntas;
+    private int contador = 0;
+    private String[] datos;
+    private String nombreArchivo;
+    private ArrayList<String> aux;
+    private ArrayList<ArrayList<String>> listaPreguntas;
+    private ArrayList<Pregunta> preguntas;
 
     public Examen() {
     }
 
-    public Examen(String nombre, ArrayList<ArrayList<String>> preguntas, int tiempoDuracion,
-            List<String> listaIntegrantes) {
+    public Examen(String nombre, int tiempoDuracion, String nombreArchivo) {
         this.nombre = nombre;
-        this.listaPreguntas = preguntas;
         this.tiempoDuracion = tiempoDuracion;
-        this.listaIntegrantes = listaIntegrantes;
+        this.nombreArchivo = nombreArchivo;
+        // this.listaIntegrantes = listaIntegrantes;
     }
 
     public String leerArchivo() {
@@ -37,7 +37,7 @@ public class Examen {
         String linea;
         String contenido = "";
 
-        archivo = new File("src\\assets\\preguntas\\text.txt");
+        archivo = new File("src\\assets\\preguntas\\" + nombreArchivo + ".txt");
 
         try {
             fr = new FileReader(archivo);
@@ -96,6 +96,14 @@ public class Examen {
         return nombre;
     }
 
+    public ArrayList<Pregunta> getPreguntas() {
+        return preguntas;
+    }
+
+    public void setPreguntas(ArrayList<Pregunta> preguntas) {
+        this.preguntas = preguntas;
+    }
+
     public void setNombre(String nombre) {
         this.nombre = nombre;
     }
@@ -128,15 +136,23 @@ public class Examen {
         return "Examen:";
     }
 
+    public String getNombreArchivo() {
+        return nombreArchivo;
+    }
+
+    public void setNombreArchivo(String nombreArchivo) {
+        this.nombreArchivo = nombreArchivo;
+    }
+
     public void agregarIntegrantes(String nuevoIntegrante) {
         listaIntegrantes.add(nuevoIntegrante);
     }
 
     public static void main(String[] args) {
-        Examen ex = new Examen();
+        Examen ex = new Examen("examen de programacion", 12, "text");
         ex.cargarExamen();
         for (Pregunta pregunta : ex.preguntas) {
-            System.out.println(pregunta.getListadoOpciones());
+            System.out.println(pregunta.getDescripcion());
         }
 
     }
