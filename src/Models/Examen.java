@@ -15,7 +15,6 @@ public class Examen {
     private float notaFinal;
     int contador = 0;
     String[] datos;
-    String contenido;
     ArrayList<String> aux;
     public ArrayList<ArrayList<String>> listaPreguntas;
     public ArrayList<Pregunta> preguntas;
@@ -38,17 +37,14 @@ public class Examen {
         String linea;
         String contenido = "";
 
-        archivo = new File(
-                "C:\\Users\\andres\\Desktop\\tercer semestre\\POE\\PROYECTO FINAL\\CollabTest\\src\\assets\\preguntas\\text.txt");
+        archivo = new File("src\\assets\\preguntas\\text.txt");
 
         try {
             fr = new FileReader(archivo);
             br = new BufferedReader(fr);
             while ((linea = br.readLine()) != null) {
                 contenido += "\n" + linea;
-
             }
-
             br.close();
             fr.close();
         } catch (FileNotFoundException e) {
@@ -72,21 +68,17 @@ public class Examen {
 
             for (int j = 0; j < datos.length; j++) {
                 if (j >= contador && j < (contador + 7)) {
-
                     aux.add(datos[j]);
-
                 }
-
             }
             listaPreguntas.add(aux);
-
             contador += 7;
         }
     }
 
     public void cargarExamen() {
         preguntas = new ArrayList<>();
-        contenido = leerArchivo();
+        String contenido = leerArchivo();
         obtenerDatos(contenido);
         for (ArrayList<String> pregunta : listaPreguntas) {
             String enunciado = pregunta.get(0);
