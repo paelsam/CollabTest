@@ -27,6 +27,7 @@ public class Examen {
         this.nombre = nombre;
         this.tiempoDuracion = tiempoDuracion;
         this.nombreArchivo = nombreArchivo;
+        cargarExamen();
         // this.listaIntegrantes = listaIntegrantes;
     }
 
@@ -148,12 +149,8 @@ public class Examen {
         listaIntegrantes.add(nuevoIntegrante);
     }
 
-    public static void main(String[] args) {
-        Examen ex = new Examen("examen de programacion", 12, "text");
-        ex.cargarExamen();
-        for (Pregunta pregunta : ex.preguntas) {
-            System.out.println(pregunta.getDescripcion());
-        }
-
+    public String mostrarDatos() {
+        return "nombre:" + nombre + "\ntiempo: " + tiempoDuracion + "\nNo. preguntas:" + preguntas.size();
     }
+
 }
