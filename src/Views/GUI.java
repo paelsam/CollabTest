@@ -76,6 +76,7 @@ public class GUI extends JFrame
         fcSeleccionarPreguntas = new JFileChooser(FileSystemView.getFileSystemView().getHomeDirectory());
 
         lTiempoExamen = new JLabel("Tiempo del examen:");
+
         sTiempoMinutos = new JSpinner(new SpinnerNumberModel(1,1,60,1));
         sTiempoSegundos = new JSpinner(new SpinnerNumberModel(1,1,60,1));
         bCrearExamen = new JButton("Crear Examen");
@@ -93,6 +94,7 @@ public class GUI extends JFrame
     }
 
 
+
     class EventListener implements ActionListener {
 
         @Override
@@ -105,12 +107,25 @@ public class GUI extends JFrame
         }
     }
 
+
+    public String getTfNombreExamen() {
+        return this.tfNombreExamen.getText();
+    }
+
+    public String getRutaPreguntas() {
+        return this.fcSeleccionarPreguntas.getSelectedFile().getPath();
+    }
+
+    public int getTiempoMinutos() {
+        return Integer.parseInt(this.sTiempoMinutos.getValue().toString());
+    }
+
+    public int getTiempoSegundos() {
+        return Integer.parseInt(this.sTiempoMinutos.getValue().toString());
+    }
+
     public static void main(String[] args) {
         GUI miGui = new GUI();
         miGui.iniciarComponentes();
     }
-
-
-
-
 }

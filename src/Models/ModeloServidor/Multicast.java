@@ -16,18 +16,17 @@ import Models.Examen;
 public class Multicast 
 {
     
-    private String HOST;
     private MulticastSocket multicastSocket;
     private DatagramPacket datagramPacket;
     private InetAddress grupo;
 
-    public Multicast(String HOST, int PUERTO)
+    public Multicast()
     {
-        this.HOST = HOST;
         try {
+            System.out.println("Iniciando multitask....");
             this.multicastSocket = new MulticastSocket();
-            this.grupo = InetAddress.getByName(this.HOST);
-            this.datagramPacket = new DatagramPacket(new byte[0], 0, grupo, PUERTO);
+            this.grupo = InetAddress.getByName("224.0.0.2");
+            this.datagramPacket = new DatagramPacket(new byte[0], 0, grupo, 9999);
         } catch (IOException error) {
             System.out.println("Error al crear el MulticastSocket: ");            
             System.out.println(error);

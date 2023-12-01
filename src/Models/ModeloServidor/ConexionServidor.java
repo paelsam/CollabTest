@@ -3,10 +3,14 @@ package Models.ModeloServidor;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.ArrayList;
+
+import Models.Examen;
 
 public class ConexionServidor extends Thread {
 
     ServerSocket servidor;
+    ArrayList<Examen> examenes; 
     int numeroEstudiantes = 0;
 
     // Para el multicast
@@ -18,8 +22,12 @@ public class ConexionServidor extends Thread {
      * @param PUERTO
      */
     public ConexionServidor(int PUERTO) {
+        this.examenes = new ArrayList<>();
+        multicast = new Multicast();
         try {
+            System.out.println("Conectando por el puerto " + PUERTO);
             servidor = new ServerSocket(PUERTO);
+            System.out.println("Servidor iniciado " + servidor); 
             start();
         } catch (IOException error) {
             System.out.println("Error al conectar al ServerSocket: ");
@@ -31,7 +39,10 @@ public class ConexionServidor extends Thread {
     public void run() {
         while (true) {
             try {
-                adicionarEstudiante(servidor.accept());
+                if ( numeroEstudiantes <= 2 )
+                    adicionarEstudiante(servidor.accept());
+                else 
+                    break;
             } catch (IOException error) {
                 System.out.println("Error al aceptar estudiantes");
                 System.out.println(error);
@@ -39,17 +50,27 @@ public class ConexionServidor extends Thread {
         }
     }
 
+    public void addExamen(Examen examen) {
+        this.examenes.add(examen);
+    }
+
     public void adicionarEstudiante(Socket socket) {
         numeroEstudiantes++;
+        System.out.println("Estudiante #" + numeroEstudiantes + " conectado!");
         HiloEstudiante estudiante = new HiloEstudiante( numeroEstudiantes, socket, multicast);
-        // try {
-            // estudiante.obtenerFlujos();
+
+        Examen examen = new Examen("Mi primer examen", 20, "src\\assets\\preguntas\\preguntas1.txt");
+        addExamen(examen);
+
+        try {
+            estudiante.obtenerFlujos();
             estudiante.start();
-        // } 
-        // catch (IOException error) {
-        //     System.out.println("Error al abrir flujos");
-        //     System.out.println(error);
-        // }
+            estudiante.enviarExamen(examen);
+        } 
+        catch (IOException error) {
+            System.out.println("Error al abrir flujos");
+            System.out.println(error);
+        }
     }
 
 }

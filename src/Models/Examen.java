@@ -76,7 +76,8 @@ public class Examen implements Serializable {
         for (ArrayList<String> pregunta : obtenerDatos(leerArchivo())) {
             String enunciado = pregunta.get(0);
             String descripcion = pregunta.get(1);
-            List<String> listadoOpciones = pregunta.subList(2, 6);
+            // Las listas no son seralizables, por lo tanto hay que convertirla a un arraylist
+            List<String> listadoOpciones = new ArrayList<String>(pregunta.subList(2, 6));
             String opcionCorrecta = pregunta.get(6);
             Pregunta nuevaPregunta = new Pregunta(enunciado, listadoOpciones, opcionCorrecta, descripcion);
             preguntas.add(nuevaPregunta);

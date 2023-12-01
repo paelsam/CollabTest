@@ -1,5 +1,8 @@
+import Models.Examen;
+import Models.ModeloServidor.ConexionServidor;
+
 public class App {
     public static void main(String[] args) throws Exception {
-        System.out.println("Hello, World!");
+        ConexionServidor conexionServidor = new ConexionServidor(10000);
     }
 }

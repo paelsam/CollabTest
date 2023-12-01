@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
-import java.net.SocketException;
 
 import Models.Examen;
 
@@ -16,7 +15,6 @@ public class HiloEstudiante extends Thread
     Socket socket;
 
     private int idEstudiante;
-    private String nombreEstudiante;
 
     public HiloEstudiante(int idEstudiante, Socket socket,  Multicast multicast)
     {
@@ -27,13 +25,19 @@ public class HiloEstudiante extends Thread
 
     @Override
     public void run() {
-        procesarConexion();
+        try {
+            procesarConexion();
+        } catch ( IOException e ) {
+            System.out.println("Error al procesar la conexión: " + e);
+        } finally {
+            cerrarConexion();
+        }
     }
 
     public void obtenerFlujos() throws IOException {
         salida = new ObjectOutputStream(socket.getOutputStream());
-        entrada = new ObjectInputStream(socket.getInputStream());
         salida.flush();
+        entrada = new ObjectInputStream(socket.getInputStream());
     }
 
     public void enviarExamen(Examen examen) {
@@ -47,26 +51,26 @@ public class HiloEstudiante extends Thread
     }
 
     // Recibe mensajes desde el servidor 
-    public Examen procesarConexion()
+    public void procesarConexion() throws IOException
     {
         do {
             try {
                 Examen examen = (Examen) entrada.readObject();
-                if ( examen.estaTerminado() ) {
+
+                if ( !examen.estaTerminado() ) {
                     multicast.enviarMensaje(examen);
                     break;
                 } else {
-                    salida.flush();
+                    System.out.println("Quisiera ser una mosca...");
                 }
             } catch (ClassNotFoundException error) {
-                System.out.println("Se recibió un tipo de dato incorrecto");
-                System.out.println(error);
+                System.out.println("Se recibió un tipo de dato incorrecto: " + error);
+                break;
             } catch ( IOException IOError ) {
-                System.out.println("Error al recibir el dato: ");
-                System.out.println(IOError);
+                System.out.println("El Estudiante #" + idEstudiante + " se fue...");
+                break;
             }
         } while (!socket.isClosed());
-        return null;
     }
 
     public boolean cerrarConexion() 
