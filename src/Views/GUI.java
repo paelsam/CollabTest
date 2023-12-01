@@ -16,17 +16,20 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
 import Controllers.Controlador;
+import Models.ModeloServidor.Multicast;
 
 public class GUI extends JFrame {
-    JPanel pestaña1, pestaña2, pestaña3, pCargar, pContenedor;
+    JPanel pestaña1, pestaña2, pestaña3, pCargar, pContenedor1, pContenedor2;
     JTabbedPane pestañas;
     public JTextField tRuta, tNombre, tTiempo;
     JLabel lNombre, lTiempo, lRuta, lInfo;
-    JButton bCrear;
-    JTextArea areaInfo;
+    JButton bCrear, bHExamen;
+    JTextArea areaInfo, areaInfo2;
+    private Multicast multi;
 
     public GUI() {
 
+        multi = new Multicast();
         setTitle("QUIZLET");
         setSize(600, 300);
         iniciarComponentes();
@@ -35,15 +38,66 @@ public class GUI extends JFrame {
         setDefaultCloseOperation(EXIT_ON_CLOSE);
     }
 
+    public Multicast getMulti() {
+        return multi;
+    }
+
     public void iniciarComponentes() {
         pestañas = new JTabbedPane();
-        pestaña1 = new JPanel(new BorderLayout());
-        pestaña2 = new JPanel();
-        pestaña3 = new JPanel();
-        pCargar = new JPanel(new GridLayout(3, 2));
-        pContenedor = new JPanel();
-        pContenedor.setLayout(new BoxLayout(pContenedor, BoxLayout.PAGE_AXIS));
+        iniciarPestaña1();
+        iniciarPestaña2();
+        /*
+         * pestaña1 = new JPanel(new BorderLayout());
+         * pestaña2 = new JPanel();
+         * pestaña3 = new JPanel();
+         * pCargar = new JPanel(new GridLayout(3, 2));
+         * pContenedor1 = new JPanel();
+         * pContenedor1.setLayout(new BoxLayout(pContenedor1, BoxLayout.PAGE_AXIS));
+         * 
+         * tRuta = new JTextField(20);
+         * tRuta.setText("path...");
+         * tNombre = new JTextField(20);
+         * tTiempo = new JTextField(20);
+         * 
+         * lRuta = new JLabel("nombre archivo");
+         * lNombre = new JLabel("nombre Examen:");
+         * lTiempo = new JLabel("tiempo");
+         * lInfo = new JLabel("informacion");
+         * 
+         * bCrear = new JButton("Crear");
+         * 
+         * areaInfo = new JTextArea(5, 20);
+         * 
+         * pCargar.add(lRuta);
+         * pCargar.add(tRuta);
+         * pCargar.add(lNombre);
+         * pCargar.add(tNombre);
+         * pCargar.add(lTiempo);
+         * pCargar.add(tTiempo);
+         * 
+         * pContenedor1.add(pCargar);
+         * pContenedor1.add(bCrear);
+         * pContenedor1.add(new JScrollPane(areaInfo));
+         * pestaña1.add(pContenedor1, BorderLayout.CENTER);
+         * 
+         * pestañas.addTab("Cargar Examen", pestaña1);
+         * pestañas.addTab("Hacer Examen", pestaña2);
+         */
+        // pestañas.addTab("visuallizar Informes", pestaña3);
 
+        add(pestañas);
+
+        gestionEventos gestion = new gestionEventos();
+        bCrear.addActionListener(gestion);
+        bHExamen.addActionListener(gestion);
+
+    }
+
+    public void iniciarPestaña1() {
+        pestaña1 = new JPanel(new BorderLayout());
+        pCargar = new JPanel(new GridLayout(3, 2));
+        pContenedor1 = new JPanel();
+        pContenedor1.setLayout(new BoxLayout(pContenedor1, BoxLayout.PAGE_AXIS));
         tRuta = new JTextField(20);
         tRuta.setText("path...");
         tNombre = new JTextField(20);
@@ -65,19 +119,22 @@ public class GUI extends JFrame {
         pCargar.add(lTiempo);
         pCargar.add(tTiempo);
 
-        pContenedor.add(pCargar);
-        pContenedor.add(bCrear);
-        pContenedor.add(new JScrollPane(areaInfo));
-        pestaña1.add(pContenedor, BorderLayout.CENTER);
-
+        pContenedor1.add(pCargar);
+        pContenedor1.add(bCrear);
+        pContenedor1.add(new JScrollPane(areaInfo));
+        pestaña1.add(pContenedor1, BorderLayout.CENTER);
         pestañas.addTab("Cargar Examen", pestaña1);
+    }
+
+    public void iniciarPestaña2() {
+        pestaña2 = new JPanel();
+        pContenedor2 = new JPanel();
+        areaInfo2 = new JTextArea(20, 20);
+        pContenedor2.add(areaInfo2);
+        pestaña2.add(pContenedor2, BorderLayout.CENTER);
         pestañas.addTab("Hacer Examen", pestaña2);
-        pestañas.addTab("visuallizar Informes", pestaña3);
-
-        add(pestañas);
-
-        gestionEventos gestion = new gestionEventos();
-        bCrear.addActionListener(gestion);
+        bHExamen = new JButton("hacer Ex");
+        pContenedor2.add(bHExamen);
 
     }
 
@@ -89,6 +146,10 @@ public class GUI extends JFrame {
         lInfo.setText(info);
     }
 
+    public void mostrarMensaje(String mensaje) {
+        areaInfo2.append(mensaje);
+    }
+
     public class gestionEventos implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
@@ -96,6 +157,10 @@ public class GUI extends JFrame {
                 Controlador.crearExamen();
                 int ultimoIndice = Controlador.Examenes.size() - 1;
                 areaInfo.setText("examen creado con exito\n" + Controlador.Examenes.get(ultimoIndice).mostrarDatos());
+
+            }
+            if (e.getSource() == bHExamen) {
+                multi.enviarMensajeMulticast("hola desde boton");
             }
         }
 
