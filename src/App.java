@@ -1,8 +1,8 @@
-import Models.Examen;
-import Models.ModeloServidor.ConexionServidor;
+import Controllers.ControladorServidor;
 
 public class App {
     public static void main(String[] args) throws Exception {
-        ConexionServidor conexionServidor = new ConexionServidor(10000);
+        ControladorServidor controladorServidor = new ControladorServidor();
+        
     }
 }

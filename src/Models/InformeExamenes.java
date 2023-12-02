@@ -2,11 +2,11 @@ package Models;
 
 import java.util.ArrayList;
 
-public class HistorialExamenes {
+public class InformeExamenes {
 
     private ArrayList<Examen> examenes;
 
-    public HistorialExamenes() {
+    public InformeExamenes() {
         this.examenes = new ArrayList<>();
     }
 

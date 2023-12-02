@@ -57,6 +57,8 @@ public class HiloEstudiante extends Thread
             try {
                 Examen examen = (Examen) entrada.readObject();
 
+                System.out.println(examen.getPreguntas().get(0).getEstado());
+
                 if ( !examen.estaTerminado() ) {
                     multicast.enviarMensaje(examen);
                     break;
