@@ -14,9 +14,15 @@ public class conexion {
 
     Multicast multicast;
     Gui gui;
+    Controlador cont;
 
-    public conexion(Gui gui) {
-        this.gui = gui;
+    public conexion(Gui gui2, Controlador cont) {
+        this.gui = gui2;
+        this.cont = cont;
+        ejecutarCliente();
+    }
+
+    public conexion() {
         ejecutarCliente();
     }
 
@@ -36,7 +42,7 @@ public class conexion {
         gui.mostrarMensaje("intentando establecer conexion...");
         cliente = new Socket("127.0.0.1", 12345);
         gui.mostrarMensaje("Conectando a: " + cliente.getInetAddress());
-        multicast = new Multicast(gui);
+        multicast = new Multicast(gui, cont);
     }
 
     public void obtenerFlujos() throws IOException {

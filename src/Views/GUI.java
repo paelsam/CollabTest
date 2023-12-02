@@ -16,6 +16,7 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
 import Controllers.Controlador;
+import Models.ModeloServidor.ConexionServidor;
 import Models.ModeloServidor.Multicast;
 
 public class GUI extends JFrame {
@@ -31,7 +32,7 @@ public class GUI extends JFrame {
 
         multi = new Multicast();
         setTitle("QUIZLET");
-        setSize(600, 300);
+        setSize(800, 600);
         iniciarComponentes();
         setVisible(true);
         setLocationRelativeTo(null);
@@ -129,7 +130,7 @@ public class GUI extends JFrame {
     public void iniciarPestaña2() {
         pestaña2 = new JPanel();
         pContenedor2 = new JPanel();
-        areaInfo2 = new JTextArea(20, 20);
+        areaInfo2 = new JTextArea(10, 10);
         pContenedor2.add(areaInfo2);
         pestaña2.add(pContenedor2, BorderLayout.CENTER);
         pestañas.addTab("Hacer Examen", pestaña2);
@@ -156,11 +157,14 @@ public class GUI extends JFrame {
             if (e.getSource() == bCrear) {
                 Controlador.crearExamen();
                 int ultimoIndice = Controlador.Examenes.size() - 1;
+                System.out.println(Controlador.Examenes.get(0));
                 areaInfo.setText("examen creado con exito\n" + Controlador.Examenes.get(ultimoIndice).mostrarDatos());
 
             }
             if (e.getSource() == bHExamen) {
-                multi.enviarMensajeMulticast("hola desde boton");
+                // multi.enviarMensajeMulticast("\nhola desde boton");
+                multi.enviarExamenMulticast(Controlador.Examenes.get(0));
+
             }
         }
 

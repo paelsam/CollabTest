@@ -5,6 +5,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 
+import Models.Examen;
 import Views.GUI;
 
 public class HiloCliente extends Thread {
@@ -14,20 +15,24 @@ public class HiloCliente extends Thread {
 
     int idCliente;
     GUI servidorGUI;
+    Multicast multicast;
 
     public HiloCliente(GUI gui, Socket s, int id, Multicast multicast) {
         this.servidorGUI = gui;
         socket = s;
         idCliente = id;
+        this.multicast = multicast;
 
     }
 
     @Override
     public void run() {
         try {
-
-        } catch (Exception e) {
-
+            procesarConexion();
+        } catch (IOException e) {
+            System.out.println("error al porecesaer la comuncacion con el cliente");
+        } finally {
+            cerrarConexion();
         }
 
     }
@@ -48,6 +53,16 @@ public class HiloCliente extends Thread {
         } catch (IOException e) {
 
             servidorGUI.mostrarMensaje("error al escribir el objeto");
+        }
+    }
+
+    public void enviarExamen(Examen examen) {
+        try {
+            salida.writeObject(examen);
+            salida.flush();
+            servidorGUI.mostrarMensaje("examen enviado");
+        } catch (IOException e) {
+            System.out.println("error al enviar examen");
         }
     }
 

@@ -1,9 +1,13 @@
 package Models.ModeloServidor;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.net.DatagramPacket;
 import java.net.InetAddress;
 import java.net.MulticastSocket;
+
+import Models.Examen;
 
 public class Multicast {
     private MulticastSocket socket_multicast;
@@ -20,6 +24,23 @@ public class Multicast {
         } catch (IOException e) {
             System.out.println("error al crear el socket de multicast");
 
+        }
+
+    }
+
+    public boolean enviarExamenMulticast(Examen examen) {
+        try {
+
+            byte[] temporal = serializarObjeto(examen);
+            // System.out.println("paso");
+            datagrama.setData(temporal);
+            datagrama.setLength(temporal.length);
+            socket_multicast.send(datagrama);
+            return true;
+        } catch (Exception e) {
+            System.out.println("error al enviar examen");
+            e.printStackTrace();
+            return false;
         }
 
     }
@@ -42,4 +63,23 @@ public class Multicast {
 
         }
     }
+
+    public byte[] serializarObjeto(Examen objeto) throws IOException {
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream(6400);
+        ObjectOutputStream objectOutputStream = new ObjectOutputStream(byteArrayOutputStream);
+
+        // Serializar el objeto a bytes
+        objectOutputStream.writeObject(objeto);
+        objectOutputStream.flush();
+
+        // Obtener los bytes resultantes
+        byte[] datosSerializados = byteArrayOutputStream.toByteArray();
+
+        // Cerrar streams
+        objectOutputStream.close();
+        byteArrayOutputStream.close();
+
+        return datosSerializados;
+    }
+
 }

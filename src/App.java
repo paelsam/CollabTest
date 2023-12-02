@@ -1,10 +1,10 @@
-import Models.ModeloServidor.ConexionServidor;
-import Views.GUI;
+import Controllers.Controlador;
+import Models.Examen;
+import Models.ModeloServidor.Multicast;
 
 public class App {
-    public static void main(String[] args) throws Exception {
-        GUI gui = new GUI();
-        ConexionServidor con = new ConexionServidor(gui, 12345);
+    public static void main(String[] args) {
+        Controlador cont = new Controlador();
 
     }
 }

@@ -84,7 +84,7 @@ public class Examen implements Serializable {
         obtenerDatos(contenido);
         for (ArrayList<String> pregunta : listaPreguntas) {
             String enunciado = pregunta.get(0);
-            ArrayList<String> listadoOpciones = new ArrayList<>(pregunta.subList(2, 6));
+            List<String> listadoOpciones = pregunta.subList(2, 6);
             String opcionCorrecta = pregunta.get(6);
             String descripcion = pregunta.get(1);
             Pregunta pre = new Pregunta(enunciado, listadoOpciones, opcionCorrecta, descripcion);

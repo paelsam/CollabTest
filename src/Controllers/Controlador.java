@@ -3,6 +3,7 @@ package Controllers;
 import java.util.ArrayList;
 
 import Models.Examen;
+import Models.ModeloServidor.ConexionServidor;
 import Views.GUI;
 
 public class Controlador {
@@ -12,6 +13,7 @@ public class Controlador {
     public Controlador() {
         gui = new GUI();
         Examenes = new ArrayList<>();
+        ConexionServidor con = new ConexionServidor(gui, 12345);
     }
 
     public static void crearExamen() {
