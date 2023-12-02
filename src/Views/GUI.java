@@ -9,13 +9,13 @@ import javax.swing.JSpinner;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
 import javax.swing.SpinnerNumberModel;
-import javax.swing.filechooser.FileSystemView;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 import java.awt.BorderLayout;
-// import java.awt.Color;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 
 public class GUI extends JFrame
 {
@@ -30,7 +30,7 @@ public class GUI extends JFrame
 
 
     JTabbedPane tabsContainer;
-    JPanel pCrearExamen, pExamenes, pInformesExamen;
+    JPanel pCrearExamen, pExamenes, pInformesExamenes;
     
 
     // Elementos de pCrearExamen
@@ -45,23 +45,27 @@ public class GUI extends JFrame
         setTitle("CollabTest");
         setLocationRelativeTo(null);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
-        setSize(800, 600);
+        setSize(800, 300);
     }
 
     public void iniciarComponentes() {
         tabsContainer = new JTabbedPane();
-        iniciarPCrearExamen();
+        pCrearExamen();
+        pExamenes();
+        pInformesExamenes();
 
         
         tabsContainer.addTab("Crear Examen", pCrearExamen);
+        tabsContainer.addTab("Exámenes", pExamenes);
+        tabsContainer.addTab("Informes", pInformesExamenes);
         add(tabsContainer);
         
         setVisible(true);
-        pack();
+        // pack();
     }
     
-    public void iniciarPCrearExamen() {
-        pCrearExamen= new JPanel(new BorderLayout());
+    public void pCrearExamen() {
+        pCrearExamen= new JPanel(new BorderLayout(10, 10));
 
         // Sub panel para añadir componentes
         JPanel spFormularioCrearExamen = new JPanel(new GridLayout(4, 3, 10, 10));
@@ -73,7 +77,12 @@ public class GUI extends JFrame
         lPreguntasExamen = new JLabel("Preguntas (txt):");
         bCargarPreguntas = new JButton("Cargar");
         lRutaPreguntas = new JLabel("No has seleccionado un archivo"); // Se añadirá la ruta
-        fcSeleccionarPreguntas = new JFileChooser(FileSystemView.getFileSystemView().getHomeDirectory());
+
+        fcSeleccionarPreguntas = new JFileChooser();
+        fcSeleccionarPreguntas.setCurrentDirectory(new File("src\\assets\\preguntas"));
+        // Filtrador de archivos, solo acepta txt
+        FileNameExtensionFilter filter = new FileNameExtensionFilter("Archivos de texto (.txt)", "txt", "text");
+        fcSeleccionarPreguntas.setFileFilter(filter);
 
         lTiempoExamen = new JLabel("Tiempo del examen:");
 
@@ -91,6 +100,14 @@ public class GUI extends JFrame
 
         EventListener eventListener = new EventListener();
         bCargarPreguntas.addActionListener(eventListener);
+    }
+
+    public void pExamenes() {
+        pExamenes = new JPanel(new BorderLayout());
+    }
+
+    public void pInformesExamenes() {
+        pInformesExamenes = new JPanel(new BorderLayout());
     }
 
 
@@ -124,8 +141,8 @@ public class GUI extends JFrame
         return Integer.parseInt(this.sTiempoMinutos.getValue().toString());
     }
 
-    public static void main(String[] args) {
-        GUI miGui = new GUI();
-        miGui.iniciarComponentes();
-    }
+    // public static void main(String[] args) {
+    //     GUI miGui = new GUI();
+    //     miGui.iniciarComponentes();
+    // }
 }

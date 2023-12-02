@@ -28,7 +28,6 @@ public class ConexionServidor extends Thread {
             System.out.println("Conectando por el puerto " + PUERTO);
             servidor = new ServerSocket(PUERTO);
             System.out.println("Servidor iniciado " + servidor); 
-            start();
         } catch (IOException error) {
             System.out.println("Error al conectar al ServerSocket: ");
             System.out.println(error);
