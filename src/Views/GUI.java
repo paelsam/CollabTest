@@ -4,12 +4,15 @@ import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JSpinner;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.filechooser.FileNameExtensionFilter;
+
+import Controllers.ControladorServidor;
 
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
@@ -55,13 +58,13 @@ public class GUI extends JFrame
         pInformesExamenes();
 
         
-        tabsContainer.addTab("Crear Examen", pCrearExamen);
         tabsContainer.addTab("Exámenes", pExamenes);
+        tabsContainer.addTab("Crear Examen", pCrearExamen);
         tabsContainer.addTab("Informes", pInformesExamenes);
         add(tabsContainer);
         
         setVisible(true);
-        // pack();
+        pack();
     }
     
     public void pCrearExamen() {
@@ -87,7 +90,7 @@ public class GUI extends JFrame
         lTiempoExamen = new JLabel("Tiempo del examen:");
 
         sTiempoMinutos = new JSpinner(new SpinnerNumberModel(1,1,60,1));
-        sTiempoSegundos = new JSpinner(new SpinnerNumberModel(1,1,60,1));
+        sTiempoSegundos = new JSpinner(new SpinnerNumberModel(0,0,60,1));
         bCrearExamen = new JButton("Crear Examen");
 
         spFormularioCrearExamen.add(lNombreExamen); spFormularioCrearExamen.add(tfNombreExamen); spFormularioCrearExamen.add(new JPanel(new BorderLayout()));
@@ -98,8 +101,10 @@ public class GUI extends JFrame
 
         pCrearExamen.add(spFormularioCrearExamen, BorderLayout.CENTER);
 
+        // Eventos 
         EventListener eventListener = new EventListener();
         bCargarPreguntas.addActionListener(eventListener);
+        bCrearExamen.addActionListener(eventListener);
     }
 
     public void pExamenes() {
@@ -111,20 +116,34 @@ public class GUI extends JFrame
     }
 
 
-
     class EventListener implements ActionListener {
 
         @Override
         public void actionPerformed(ActionEvent e) {
             if ( e.getSource() == bCargarPreguntas ) {
-                fcSeleccionarPreguntas.showSaveDialog(null);
-                if ( !fcSeleccionarPreguntas.getSelectedFile().getPath().isEmpty() )
-                    lRutaPreguntas.setText(fcSeleccionarPreguntas.getSelectedFile().getName());
+                switch(fcSeleccionarPreguntas.showSaveDialog(null)) {
+                    case JFileChooser.APPROVE_OPTION:
+                        if ( fcSeleccionarPreguntas.getSelectedFile().exists() )
+                            lRutaPreguntas.setText(fcSeleccionarPreguntas.getSelectedFile().getName());
+                        break;
+                    default:
+                        break;
+                };
+            }
+            if ( e.getSource() == bCrearExamen ) {
+                if ( !getTfNombreExamen().isEmpty() && !getRutaPreguntas().isEmpty() )
+                    ControladorServidor.crearExamen();
+                else
+                    mostrarMensaje("Llena todos los campos correctamente!", JOptionPane.ERROR_MESSAGE);
             }
         }
     }
 
+    public void mostrarMensaje(String mensaje, int status) {
+        JOptionPane.showMessageDialog(null, mensaje, "Crear examen", status);
+    }
 
+    // Getters pCrearExamen 
     public String getTfNombreExamen() {
         return this.tfNombreExamen.getText();
     }
@@ -140,6 +159,7 @@ public class GUI extends JFrame
     public int getTiempoSegundos() {
         return Integer.parseInt(this.sTiempoMinutos.getValue().toString());
     }
+
 
     // public static void main(String[] args) {
     //     GUI miGui = new GUI();

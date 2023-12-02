@@ -1,23 +1,30 @@
 package Controllers;
 
+
+import Models.Examen;
+import Models.InformeExamenes;
 import Models.ModeloServidor.ConexionServidor;
 import Views.GUI;
 
 public class ControladorServidor {
 
-    private GUI gui;
-    private ConexionServidor servidor;
+    private static GUI gui;
+    private static ConexionServidor servidor;
+    private static InformeExamenes informeExamenes;
 
     public ControladorServidor() {
-        this.servidor = new ConexionServidor(10000);
-        this.gui = new GUI();
-        this.gui.iniciarComponentes();
-        this.servidor.start();
+        ControladorServidor.servidor = new ConexionServidor(10000);
+        ControladorServidor.informeExamenes = new InformeExamenes();
+        gui = new GUI();
+        servidor.start();
+        gui.iniciarComponentes();
     }
 
-    public void crearExamen() {
-        
+    public static void crearExamen() {
+        int tiempoExamenSegundos = (gui.getTiempoMinutos() * 60) + gui.getTiempoSegundos();
+        Examen nuevoExamen = new Examen(gui.getTfNombreExamen(), tiempoExamenSegundos, gui.getRutaPreguntas());
+        informeExamenes.addExamen(nuevoExamen);
+        gui.mostrarMensaje("Examen añadido con éxito", 1);
     }
-
 
 }

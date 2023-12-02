@@ -6,6 +6,7 @@ import java.net.Socket;
 import java.util.ArrayList;
 
 import Models.Examen;
+import Models.InformeExamenes;
 
 public class ConexionServidor extends Thread {
 
@@ -58,8 +59,17 @@ public class ConexionServidor extends Thread {
         System.out.println("Estudiante #" + numeroEstudiantes + " conectado!");
         HiloEstudiante estudiante = new HiloEstudiante( numeroEstudiantes, socket, multicast);
 
+        InformeExamenes informeExamenes = new InformeExamenes();
+
         Examen examen = new Examen("Mi primer examen", 20, "src\\assets\\preguntas\\preguntas1.txt");
         addExamen(examen);
+        informeExamenes.cargarHistorial();
+        System.out.println(informeExamenes.verHistorialExamenes());
+        // informeExamenes.addToHistorial(examen);
+        // informeExamenes.guardarHistorial();
+
+        
+
 
         try {
             estudiante.obtenerFlujos();

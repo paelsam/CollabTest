@@ -10,6 +10,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Examen implements Serializable {
+    
+    // Por si tenemos una versión actual o antigua del objeto
+    private static final long serialVersionUID = 8799656478674716638L;
+
 
     private ArrayList<Pregunta> preguntas;
     private float notaFinal;
@@ -149,5 +153,13 @@ public class Examen implements Serializable {
 
     public void agregarIntegrante(String nuevoIntegrante) {
         listaIntegrantes.add(nuevoIntegrante);
+    }
+
+    public String toString() {
+        return "Nombre del examen: " + this.nombre  + "\n" 
+            + "Archivo de preguntas: " + this.rutaArchivoPreguntas + "\n"
+            + "Integrantes: " + this.listaIntegrantes + "\n"
+            + "Tiempo de duración: " +  Math.floor(this.tiempoDuracion / 60) + " minutos" + "\n"
+            + "Nota final: " + this.notaFinal + "\n"; 
     }
 }
