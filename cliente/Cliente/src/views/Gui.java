@@ -70,7 +70,7 @@ public class Gui extends JFrame {
         grupo.add(rD);
 
         bObtener = new JButton("obtener");
-        bCargarE = new JButton("CargarExamen");
+        bCargarE = new JButton("Iniciar");
 
         pDerecha = new JPanel();
         pSur = new JPanel();
