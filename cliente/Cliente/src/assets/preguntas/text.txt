@@ -1,4 +1,4 @@
-pregunta ,descripcion,A,B,C,D,R,
+pregunta ,descripcion,A,B,C,D,B,
 cual es el error?,public static String leerArchivo(String rutaArchivo) throws IOException {
         StringBuilder contenido = new StringBuilder();
         try (BufferedReader br = new BufferedReader(new FileReader(rutaArchivo))) {
@@ -8,8 +8,8 @@ cual es el error?,public static String leerArchivo(String rutaArchivo) throws IO
             }
         }
         return contenido.toString();
-    },me cago en la leche,mejor no hagas nada,2200,what the fuck,mejor no hagas nada,
-cual es el inventor de el calculo?,no tiene descripcion,isac newton,gauss,nicola tesla,alber ainstain,isacnewton,
+    },me cago en la leche,mejor no hagas nada,2200,what the fuck,B,
+cual es el inventor de el calculo?,no tiene descripcion,isac newton,gauss,nicola tesla,alber ainstain,A,
 cual es el error en el siguiente codigo?,public static void main(String[] args) {
         String rutaArchivo = "ruta_del_archivo.txt";  // Reemplaza con la ruta de tu archivo
         try {
@@ -19,4 +19,4 @@ cual es el error en el siguiente codigo?,public static void main(String[] args) 
         } catch (IOException e) {
             e.printStackTrace();
         }
-    },no tiene try-catch,le falta println, no es un codigo,ya valimos,ya valimos
+    },no tiene try-catch,le falta println, no es un codigo,ya valimos,D

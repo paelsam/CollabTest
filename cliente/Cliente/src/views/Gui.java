@@ -1,6 +1,7 @@
 package views;
 
 import javax.swing.ButtonGroup;
+import javax.swing.ButtonModel;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -24,6 +25,8 @@ import java.awt.GridLayout;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.util.ArrayList;
 
 public class Gui extends JFrame {
@@ -35,7 +38,7 @@ public class Gui extends JFrame {
 
     JMenuBar barraMenu;
     JRadioButton rA, rB, rC, rD;
-    JButton bObtener, bCargarE;
+    JButton bObtener, bCargarE, bResponder;
     ButtonGroup grupo;
     JList<String> lista;
     String[] elementos = { "     ", "     ", "    ", "    ", "     ", "     ", "     " };
@@ -59,10 +62,14 @@ public class Gui extends JFrame {
         lC = new JLabel("preguntaC");
         lD = new JLabel("pregunta D");
 
-        rA = new JRadioButton();
-        rB = new JRadioButton();
-        rC = new JRadioButton();
-        rD = new JRadioButton();
+        rA = new JRadioButton("A");
+        rA.setActionCommand("A");
+        rB = new JRadioButton("B");
+        rB.setActionCommand("B");
+        rC = new JRadioButton("C");
+        rC.setActionCommand("C");
+        rD = new JRadioButton("D");
+        rD.setActionCommand("D");
         grupo = new ButtonGroup();
         grupo.add(rA);
         grupo.add(rB);
@@ -71,6 +78,7 @@ public class Gui extends JFrame {
 
         bObtener = new JButton("obtener");
         bCargarE = new JButton("Iniciar");
+        bResponder = new JButton("Responder");
 
         pDerecha = new JPanel();
         pSur = new JPanel();
@@ -116,16 +124,24 @@ public class Gui extends JFrame {
         pIzquierda.add(bar);
         pIzquierda.add(bObtener);
         pIzquierda.add(bCargarE);
+        pIzquierda.add(bResponder);
 
         manejoEventos eventos = new manejoEventos();
         bObtener.addActionListener(eventos);
         bCargarE.addActionListener(eventos);
+        bResponder.addActionListener(eventos);
+
+        /*
+         * RadioButtonListener rv = new RadioButtonListener();
+         * rA.addItemListener(rv);
+         * rB.addItemListener(rv);
+         * rC.addItemListener(rv);
+         * rD.addItemListener(rv);
+         */
 
     }
 
     public class manejoEventos implements ActionListener {
-        manejoEventos() {
-        }
 
         @Override
         public void actionPerformed(ActionEvent e) {
@@ -140,13 +156,53 @@ public class Gui extends JFrame {
             if (e.getSource() == bCargarE) {
                 // mostrarMensaje(cont.getExamen().getNombre());
                 introducirPreguntas(cont.getExamen().getPreguntas());
+
             }
+
+            if (e.getSource() == bResponder) {
+                String respuesta = obtenerTextoSeleccionado(grupo);
+                cont.GuardarRespuesta(respuesta);
+                mostrarMensaje("GUARDADO-->pregunta-->\n" + cont.getExamen().mostrarEstadoPreguntas());
+                // cont.getCon().enviarExamen();
+
+            }
+
         }
 
     }
 
+    /*
+     * public class RadioButtonListener implements ItemListener {
+     * 
+     * @Override
+     * public void itemStateChanged(ItemEvent e) {
+     * if (e.getStateChange() == ItemEvent.SELECTED) {
+     * JRadioButton botonSeleccionado = (JRadioButton) e.getItem();
+     * if (botonSeleccionado.getText().equals(cont.getActual().getOpcionCorrecta()))
+     * {
+     * cont.ModificarEstadoPreguntasExamen(true);
+     * }
+     * mostrarMensaje(botonSeleccionado.getText());
+     * }
+     * }
+     * 
+     * }
+     */
+
     public void mostrarMensaje(String mensaje) {
         descripcionP.setText(mensaje + "\n");
+    }
+
+    public String obtenerTextoSeleccionado(ButtonGroup buttonGroup) {
+
+        ButtonModel selectedButtonModel = buttonGroup.getSelection();
+
+        if (selectedButtonModel != null) {
+
+            return selectedButtonModel.getActionCommand();
+        } else {
+            return "Ningún botón seleccionado";
+        }
     }
 
     public void mostrarPregunta() {

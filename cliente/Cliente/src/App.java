@@ -1,5 +1,4 @@
 import controlador.Controlador;
-import views.Gui;
 
 class App {
 

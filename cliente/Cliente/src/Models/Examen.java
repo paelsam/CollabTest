@@ -86,7 +86,7 @@ public class Examen implements Serializable {
         obtenerDatos(contenido);
         for (ArrayList<String> pregunta : listaPreguntas) {
             String enunciado = pregunta.get(0);
-            List<String> listadoOpciones = pregunta.subList(2, 6);
+            ArrayList<String> listadoOpciones = new ArrayList<>(pregunta.subList(2, 6));
             String opcionCorrecta = pregunta.get(6);
             String descripcion = pregunta.get(1);
             Pregunta pre = new Pregunta(enunciado, listadoOpciones, opcionCorrecta, descripcion);
@@ -156,13 +156,12 @@ public class Examen implements Serializable {
         return "nombre:" + nombre + "\ntiempo: " + tiempoDuracion + "\nNo. preguntas:" + preguntas.size();
     }
 
-    public static void main(String[] args) {
-        // Examen examen = new Examen("andres", 12, "text");
-
-        // System.out.println(examen.getPreguntas());
-
-        // Examen examen = new Examen();
-        // System.out.println(examen.leerArchivo());
+    public String mostrarEstadoPreguntas() {
+        String resultado = "";
+        for (Pregunta p : preguntas) {
+            resultado += p.getEstado() + "\n";
+        }
+        return resultado;
     }
 
 }

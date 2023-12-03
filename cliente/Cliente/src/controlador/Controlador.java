@@ -36,6 +36,18 @@ public class Controlador {
 
     }
 
+    public void GuardarRespuesta(String respuesta) {
+        if (actual.getOpcionCorrecta().equals(respuesta)) {
+            for (int i = 0; i < examen.getPreguntas().size(); i++) {
+                if (examen.getPreguntas().get(i) == actual) {
+                    examen.getPreguntas().get(i).setEstado(true);
+                }
+            }
+
+        }
+
+    }
+
     public Pregunta getActual() {
         return actual;
     }

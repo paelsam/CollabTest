@@ -154,4 +154,12 @@ public class Examen implements Serializable {
         return "nombre:" + nombre + "\ntiempo: " + tiempoDuracion + "\nNo. preguntas:" + preguntas.size();
     }
 
+    public String mostrarEstadoPreguntas() {
+        String resultado = "";
+        for (Pregunta p : preguntas) {
+            resultado += p.getEstado() + "\n";
+        }
+        return resultado;
+    }
+
 }

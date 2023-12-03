@@ -8,7 +8,7 @@ public class Pregunta implements Serializable {
     private List<String> listadoOpciones;
     private final String opcionCorrecta;
     private final String descripcion;
-    private String estado;
+    private boolean estado;
     private String respondidoPor;
     private boolean esCorrecta;
 
@@ -17,16 +17,16 @@ public class Pregunta implements Serializable {
         this.listadoOpciones = listadoOpciones;
         this.opcionCorrecta = opcionCorrecta;
         this.descripcion = descripcion;
-        this.estado = "";
+        this.estado = false;
         this.respondidoPor = "";
         this.esCorrecta = false;
     }
 
-    public String getEstado() {
+    public boolean getEstado() {
         return estado;
     }
 
-    public void setEstado(String estado) {
+    public void setEstado(boolean estado) {
         this.estado = estado;
     }
 
