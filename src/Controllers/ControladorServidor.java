@@ -27,4 +27,21 @@ public class ControladorServidor {
         gui.mostrarMensaje("Examen añadido con éxito", 1);
     }
 
+    public static String[] getNombreExamenes() {
+        String[] nombreExamenes = new String[informeExamenes.getExamenes().size()];
+        for (int i = 0; i < informeExamenes.getExamenes().size(); i++) {
+            nombreExamenes[i] = informeExamenes.getExamenes().get(i).getNombre();
+        }
+        return nombreExamenes;
+    }
+
+    public static Examen getExamenByName(String name) {
+        for (Examen examen : informeExamenes.getExamenes() ){
+            if ( examen.getNombre().equals(name) )
+                return examen;
+            continue;
+        }
+        return null;
+    }
+
 }

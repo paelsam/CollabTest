@@ -47,7 +47,7 @@ public class InformeExamenes {
     public void cargarHistorial() {
         try (FileInputStream fis = new FileInputStream("src\\assets\\examenes.txt");
             ObjectInputStream ois = new ObjectInputStream(fis); ) {
-                this.historialExamenes = (ArrayList) ois.readObject();
+                this.historialExamenes = (ArrayList<Examen>) ois.readObject();
         } catch ( IOException e ) {
             System.out.println("Error al cargar el archivo: " + e);
         } catch ( ClassNotFoundException clse) {

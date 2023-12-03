@@ -156,10 +156,16 @@ public class Examen implements Serializable {
     }
 
     public String toString() {
+        String preguntasString = "";
+        for (Pregunta pregunta : preguntas ) {
+            preguntasString += pregunta.toString() + "\n---------------------------\n";
+        }
+
         return "Nombre del examen: " + this.nombre  + "\n" 
             + "Archivo de preguntas: " + this.rutaArchivoPreguntas + "\n"
             + "Integrantes: " + this.listaIntegrantes + "\n"
             + "Tiempo de duración: " +  Math.floor(this.tiempoDuracion / 60) + " minutos" + "\n"
-            + "Nota final: " + this.notaFinal + "\n"; 
+            + "Nota final: " + this.notaFinal + "\n" 
+            + "Preguntas: " + "\n---------------------------\n" + preguntasString;  
     }
 }

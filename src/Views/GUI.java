@@ -1,6 +1,8 @@
 package Views;
 
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -10,12 +12,18 @@ import javax.swing.JSpinner;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
 import javax.swing.SpinnerNumberModel;
+import javax.swing.SwingConstants;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import Controllers.ControladorServidor;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.Font;
 import java.awt.GridLayout;
+import java.awt.TextArea;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
@@ -42,13 +50,19 @@ public class GUI extends JFrame
     JLabel lRutaPreguntas; JFileChooser fcSeleccionarPreguntas;
     JLabel lTiempoExamen; JSpinner sTiempoMinutos; JSpinner sTiempoSegundos;
     JButton bCrearExamen;
+
+    // Elemenetos de pExamenes
+    JComboBox<String> cbExamenes;
+    TextArea tAreaVisualizarExamen;
+    JButton bIniciarExamen; JButton bVisualizarExamen;
+    CircularLabel lEstudiantesConectados[] = new CircularLabel[3];
     
 
     public GUI() {
         setTitle("CollabTest");
-        setLocationRelativeTo(null);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
-        setSize(800, 300);
+        setSize(800, 200);
+        setResizable(false);
     }
 
     public void iniciarComponentes() {
@@ -58,10 +72,16 @@ public class GUI extends JFrame
         pInformesExamenes();
 
         
-        tabsContainer.addTab("Exámenes", pExamenes);
         tabsContainer.addTab("Crear Examen", pCrearExamen);
+        tabsContainer.addTab("Exámenes", pExamenes);
         tabsContainer.addTab("Informes", pInformesExamenes);
         add(tabsContainer);
+
+        // Eventos 
+        EventListener eventListener = new EventListener();
+        bCargarPreguntas.addActionListener(eventListener);
+        bCrearExamen.addActionListener(eventListener);
+        bVisualizarExamen.addActionListener(eventListener);
         
         setVisible(true);
         pack();
@@ -100,15 +120,76 @@ public class GUI extends JFrame
         spFormularioCrearExamen.add(new JPanel(new BorderLayout()));spFormularioCrearExamen.add(bCrearExamen); spFormularioCrearExamen.add(new JPanel(new BorderLayout()));
 
         pCrearExamen.add(spFormularioCrearExamen, BorderLayout.CENTER);
-
-        // Eventos 
-        EventListener eventListener = new EventListener();
-        bCargarPreguntas.addActionListener(eventListener);
-        bCrearExamen.addActionListener(eventListener);
     }
 
     public void pExamenes() {
         pExamenes = new JPanel(new BorderLayout());
+
+        JPanel pNorte = new JPanel(new BorderLayout());
+        JPanel pEste = new JPanel(new BorderLayout());
+        JPanel pOeste = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 20));
+
+        JLabel lTitulo = new JLabel("Iniciar examen");
+        lTitulo.setFont(new Font("Arial", Font.BOLD, 24));
+        lTitulo.setHorizontalAlignment(SwingConstants.CENTER);
+        lTitulo.setVerticalAlignment(SwingConstants.CENTER);
+
+        JLabel lElegirExamen = new JLabel("Elige un examen:");
+        lElegirExamen.setFont(new Font("Arial", Font.BOLD, 14));
+        lElegirExamen.setHorizontalAlignment(SwingConstants.CENTER);
+        lElegirExamen.setVerticalAlignment(SwingConstants.CENTER);
+
+
+        JLabel lVisualizarExamen = new JLabel("Visualizar examen:");
+        lVisualizarExamen.setFont(new Font("Arial", Font.BOLD, 14));
+        lVisualizarExamen.setHorizontalAlignment(SwingConstants.CENTER);
+        lVisualizarExamen.setVerticalAlignment(SwingConstants.CENTER);
+
+        bIniciarExamen = new JButton("Iniciar");
+        bIniciarExamen.setPreferredSize(new Dimension(80, 30));
+        bVisualizarExamen = new JButton("Ver");
+        bVisualizarExamen.setPreferredSize(new Dimension(80, 30));
+        
+
+        JLabel lTextEstudiantesConectados = new JLabel("Estudiantes en línea:");
+        lTextEstudiantesConectados.setFont(new Font("Arial", Font.BOLD, 14));
+        lTextEstudiantesConectados.setHorizontalAlignment(SwingConstants.CENTER);
+        lTextEstudiantesConectados.setVerticalAlignment(SwingConstants.CENTER);
+
+        cbExamenes = new JComboBox<>();
+        cbExamenes.setPreferredSize(new Dimension(150, 30));
+
+        // Creando labels para estudiantes conectados
+        for (int i = 0; i < lEstudiantesConectados.length; i++) {
+            lEstudiantesConectados[i] = crearLEstudiante();
+        }
+
+        tAreaVisualizarExamen = new TextArea(15, 15);
+
+        pNorte.setPreferredSize(new Dimension(300, 50));
+        pNorte.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+
+        pOeste.setPreferredSize(new Dimension(200, this.getHeight()));
+        pOeste.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+        
+        pEste.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+
+        pNorte.add(lTitulo, BorderLayout.CENTER);
+        
+        pOeste.add(lElegirExamen);
+        pOeste.add(cbExamenes);
+        pOeste.add(bIniciarExamen);
+        pOeste.add(bVisualizarExamen);
+        pOeste.add(lTextEstudiantesConectados);
+        for ( CircularLabel lEstudiante : lEstudiantesConectados )
+            pOeste.add(lEstudiante);
+            
+        pEste.add(lVisualizarExamen, BorderLayout.NORTH);
+        pEste.add(tAreaVisualizarExamen, BorderLayout.CENTER);
+        
+        pExamenes.add(pNorte, BorderLayout.NORTH);
+        pExamenes.add(pOeste, BorderLayout.WEST);
+        pExamenes.add(pEste, BorderLayout.CENTER);
     }
 
     public void pInformesExamenes() {
@@ -131,16 +212,43 @@ public class GUI extends JFrame
                 };
             }
             if ( e.getSource() == bCrearExamen ) {
-                if ( !getTfNombreExamen().isEmpty() && !getRutaPreguntas().isEmpty() )
+                if ( !getTfNombreExamen().isEmpty() && !getRutaPreguntas().isEmpty() ) {
                     ControladorServidor.crearExamen();
+                    addItems(ControladorServidor.getNombreExamenes());
+                }
                 else
                     mostrarMensaje("Llena todos los campos correctamente!", JOptionPane.ERROR_MESSAGE);
+            }
+            if ( e.getSource() == bVisualizarExamen ) {
+                String nombreExamen = (String) cbExamenes.getSelectedItem();
+                if ( !nombreExamen.isEmpty()  )
+                    setTAreaVisualizarExamen(ControladorServidor.getExamenByName(nombreExamen).toString());
+                    
             }
         }
     }
 
     public void mostrarMensaje(String mensaje, int status) {
         JOptionPane.showMessageDialog(null, mensaje, "Crear examen", status);
+    }
+
+    // Métodos de pExámenes
+    public void addItems(String[] nombresExamenes) {
+        for (String nombreExamen : nombresExamenes ) {
+            cbExamenes.addItem(nombreExamen);
+        }
+    }
+
+    public void setTAreaVisualizarExamen(String text) {
+        tAreaVisualizarExamen.setText(text);
+    }
+
+    public CircularLabel crearLEstudiante() {
+        CircularLabel lEstudiante = new CircularLabel();
+        lEstudiante.setText(" ");
+        lEstudiante.setPreferredSize(new Dimension(40, 40));
+        lEstudiante.setBackground(Color.GRAY);
+        return lEstudiante;
     }
 
     // Getters pCrearExamen 

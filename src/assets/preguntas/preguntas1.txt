@@ -1,4 +1,3 @@
-pregunta,descripcion,A,B,C,D,R,
 cual es el error?,public static String leerArchivo(String rutaArchivo) throws IOException {
         StringBuilder contenido = new StringBuilder();
         try (BufferedReader br = new BufferedReader(new FileReader(rutaArchivo))) {
