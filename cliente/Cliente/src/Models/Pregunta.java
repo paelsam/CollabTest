@@ -4,22 +4,6 @@ import java.io.Serializable;
 import java.util.List;
 
 public class Pregunta implements Serializable {
-    public String getEnunciado() {
-        return enunciado;
-    }
-
-    public List<String> getListadoOpciones() {
-        return listadoOpciones;
-    }
-
-    public String getOpcionCorrecta() {
-        return opcionCorrecta;
-    }
-
-    public String getDescripcion() {
-        return descripcion;
-    }
-
     private final String enunciado;
     private List<String> listadoOpciones;
     private final String opcionCorrecta;
@@ -64,6 +48,22 @@ public class Pregunta implements Serializable {
 
     public void verificarOpcion(String opcion) {
         // codigo
+    }
+
+    public String getEnunciado() {
+        return enunciado;
+    }
+
+    public List<String> getListadoOpciones() {
+        return listadoOpciones;
+    }
+
+    public String getOpcionCorrecta() {
+        return opcionCorrecta;
+    }
+
+    public String getDescripcion() {
+        return descripcion;
     }
 
 }

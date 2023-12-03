@@ -1,6 +1,7 @@
 package Views;
 
 import java.awt.BorderLayout;
+import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -20,7 +21,7 @@ import Models.ModeloServidor.ConexionServidor;
 import Models.ModeloServidor.Multicast;
 
 public class GUI extends JFrame {
-    JPanel pestaña1, pestaña2, pestaña3, pCargar, pContenedor1, pContenedor2;
+    JPanel pestaña1, pestaña2, pestaña3, pCargar, pContenedor1, pContenedor2, pContenedor3;
     JTabbedPane pestañas;
     public JTextField tRuta, tNombre, tTiempo;
     JLabel lNombre, lTiempo, lRuta, lInfo;
@@ -129,9 +130,11 @@ public class GUI extends JFrame {
 
     public void iniciarPestaña2() {
         pestaña2 = new JPanel();
-        pContenedor2 = new JPanel();
+        pContenedor2 = new JPanel(new FlowLayout());
+        pContenedor3 = new JPanel(new FlowLayout());
         areaInfo2 = new JTextArea(10, 10);
-        pContenedor2.add(areaInfo2);
+        pContenedor3.add(areaInfo2);
+        pContenedor2.add(pContenedor3);
         pestaña2.add(pContenedor2, BorderLayout.CENTER);
         pestañas.addTab("Hacer Examen", pestaña2);
         bHExamen = new JButton("hacer Ex");

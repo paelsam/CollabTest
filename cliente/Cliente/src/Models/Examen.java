@@ -22,6 +22,7 @@ public class Examen implements Serializable {
     private ArrayList<Pregunta> preguntas;
 
     public Examen() {
+
     }
 
     public Examen(String nombre, int tiempoDuracion, String nombreArchivo) {
@@ -39,8 +40,9 @@ public class Examen implements Serializable {
         String linea;
         String contenido = "";
 
-        archivo = new File("src\\assets\\preguntas\\" + nombreArchivo + ".txt");
-
+        archivo = new File(
+                "C:\\Users\\andres\\Desktop\\tercer semestre\\POE\\PROYECTO FINAL\\cliente\\Cliente\\src\\assets\\preguntas\\"
+                        + nombreArchivo + ".txt");
         try {
             fr = new FileReader(archivo);
             br = new BufferedReader(fr);
@@ -152,6 +154,15 @@ public class Examen implements Serializable {
 
     public String mostrarDatos() {
         return "nombre:" + nombre + "\ntiempo: " + tiempoDuracion + "\nNo. preguntas:" + preguntas.size();
+    }
+
+    public static void main(String[] args) {
+        // Examen examen = new Examen("andres", 12, "text");
+
+        // System.out.println(examen.getPreguntas());
+
+        // Examen examen = new Examen();
+        // System.out.println(examen.leerArchivo());
     }
 
 }

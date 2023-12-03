@@ -31,6 +31,7 @@ public class Gui extends JFrame {
     JPanel pSur, pIzquierda, pDerecha, pContenedor, pContenedor2;
 
     JTextArea descripcionP;
+    JScrollPane JScrollPane;
 
     JMenuBar barraMenu;
     JRadioButton rA, rB, rC, rD;
@@ -42,7 +43,7 @@ public class Gui extends JFrame {
     Controlador cont;
 
     public Gui(Controlador cont) {
-        setSize(600, 500);
+        setSize(700, 600);
         setTitle("cliente");
         iniciarComponentes();
         setVisible(true);
@@ -84,6 +85,9 @@ public class Gui extends JFrame {
         pContenedor2.add(pSur);
         descripcionP = new JTextArea(20, 30);
 
+        JScrollPane scrollPane = new JScrollPane(descripcionP);
+        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+
         setJMenuBar(barraMenu);
 
         pSur.add(lA);
@@ -94,10 +98,10 @@ public class Gui extends JFrame {
         pSur.add(rC);
         pSur.add(lD);
         pSur.add(rD);
-        pDerecha.add(descripcionP);
+        pDerecha.add(scrollPane);
         setLayout(new BorderLayout());
         add(pContenedor2, BorderLayout.SOUTH);
-        add(pContenedor, BorderLayout.CENTER);
+        add(pContenedor, BorderLayout.NORTH);
 
         modeloLista = new DefaultListModel<>();
 
@@ -126,7 +130,12 @@ public class Gui extends JFrame {
         @Override
         public void actionPerformed(ActionEvent e) {
             if (e.getSource() == bObtener) {
-                mostrarMensaje(lista.getSelectedValue());
+                // mostrarMensaje(lista.getSelectedValue());
+                if (!lista.getSelectedValue().equals(null)) {
+                    cont.sacarPreguntaActual(lista.getSelectedValue());
+                    mostrarPregunta();
+                }
+
             }
             if (e.getSource() == bCargarE) {
                 // mostrarMensaje(cont.getExamen().getNombre());
@@ -137,7 +146,16 @@ public class Gui extends JFrame {
     }
 
     public void mostrarMensaje(String mensaje) {
-        descripcionP.append(mensaje + "\n");
+        descripcionP.setText(mensaje + "\n");
+    }
+
+    public void mostrarPregunta() {
+
+        mostrarMensaje(cont.getActual().getEnunciado() + "\n" + cont.getActual().getDescripcion() +
+                "\nRESPUESTAS:" + "\nA: " + cont.getActual().getListadoOpciones().get(0) + "\nB: "
+                + cont.getActual().getListadoOpciones().get(1)
+                + "\nC: " + cont.getActual().getListadoOpciones().get(2) + "\nD: "
+                + cont.getActual().getListadoOpciones().get(3));
     }
 
     public void introducirPreguntas(ArrayList<Pregunta> preguntas) {

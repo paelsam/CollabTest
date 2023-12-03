@@ -17,9 +17,9 @@ public class ConexionServidor extends Thread {
   public ConexionServidor(GUI gui, int port) {
     this.gui = gui;
     try {
-      this.gui.mostrarMensaje("Conectando por el puerto" + port + "Espere por favor...");
+      this.gui.mostrarMensaje("Conectando por el puerto" + port + "Espere por favor...\n");
       servidor = new ServerSocket(port);
-      this.gui.mostrarMensaje("servidor iniciado" + servidor);
+      this.gui.mostrarMensaje("servidor iniciado" + servidor + "\n");
       multicast = gui.getMulti();
       start();
 
