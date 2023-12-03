@@ -63,6 +63,7 @@ public class GUI extends JFrame
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setSize(800, 200);
         setResizable(false);
+
     }
 
     public void iniciarComponentes() {
@@ -82,6 +83,8 @@ public class GUI extends JFrame
         bCargarPreguntas.addActionListener(eventListener);
         bCrearExamen.addActionListener(eventListener);
         bVisualizarExamen.addActionListener(eventListener);
+
+        
         
         setVisible(true);
         pack();
@@ -251,6 +254,19 @@ public class GUI extends JFrame
         return lEstudiante;
     }
 
+    public JPanel getPExamenes() {
+        return pExamenes;
+    }
+
+    public void cambiarColorCirclesLabel(int numCircles, Color color) {
+       // todo: Arreglar esto
+
+        for ( int i = 0; i < numCircles; i++) {
+            lEstudiantesConectados[i].setBackground(color);
+        }
+        pExamenes.updateUI();
+    }
+
     // Getters pCrearExamen 
     public String getTfNombreExamen() {
         return this.tfNombreExamen.getText();
@@ -267,10 +283,4 @@ public class GUI extends JFrame
     public int getTiempoSegundos() {
         return Integer.parseInt(this.sTiempoMinutos.getValue().toString());
     }
-
-
-    // public static void main(String[] args) {
-    //     GUI miGui = new GUI();
-    //     miGui.iniciarComponentes();
-    // }
 }

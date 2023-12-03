@@ -1,6 +1,8 @@
 package Controllers;
 
 
+import java.awt.Color;
+
 import Models.Examen;
 import Models.InformeExamenes;
 import Models.ModeloServidor.ConexionServidor;
@@ -18,6 +20,16 @@ public class ControladorServidor {
         gui = new GUI();
         servidor.start();
         gui.iniciarComponentes();
+    }
+
+    public static void serverLoop() {
+        while (true) {
+            if ( gui.getPExamenes().isShowing() ) {
+                // Hay que cambiar esto
+                gui.cambiarColorCirclesLabel(servidor.verificarEstudiantesActivos(), Color.GREEN);
+            }
+        }
+            
     }
 
     public static void crearExamen() {

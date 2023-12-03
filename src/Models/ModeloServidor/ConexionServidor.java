@@ -6,13 +6,14 @@ import java.net.Socket;
 import java.util.ArrayList;
 
 import Models.Examen;
-import Models.InformeExamenes;
 
 public class ConexionServidor extends Thread {
 
     ServerSocket servidor;
     ArrayList<Examen> examenes; 
+    ArrayList<HiloEstudiante> estudiantes;
     int numeroEstudiantes = 0;
+    int estudiantesActivos = 0;
 
     // Para el multicast
     Multicast multicast;
@@ -24,6 +25,7 @@ public class ConexionServidor extends Thread {
      */
     public ConexionServidor(int PUERTO) {
         this.examenes = new ArrayList<>();
+        this.estudiantes = new ArrayList<>();
         multicast = new Multicast();
         try {
             System.out.println("Conectando por el puerto " + PUERTO);
@@ -55,31 +57,27 @@ public class ConexionServidor extends Thread {
     }
 
     public void adicionarEstudiante(Socket socket) {
+        estudiantesActivos++;
         numeroEstudiantes++;
         System.out.println("Estudiante #" + numeroEstudiantes + " conectado!");
         HiloEstudiante estudiante = new HiloEstudiante( numeroEstudiantes, socket, multicast);
-
-        InformeExamenes informeExamenes = new InformeExamenes();
-
-        Examen examen = new Examen("Mi primer examen", 20, "src\\assets\\preguntas\\preguntas1.txt");
-        addExamen(examen);
-        informeExamenes.cargarHistorial();
-        System.out.println(informeExamenes.verHistorialExamenes());
-        // informeExamenes.addToHistorial(examen);
-        // informeExamenes.guardarHistorial();
-
-        
-
-
+        estudiantes.add(estudiante);
         try {
             estudiante.obtenerFlujos();
             estudiante.start();
-            estudiante.enviarExamen(examen);
-        } 
-        catch (IOException error) {
+        } catch (IOException error) {
             System.out.println("Error al abrir flujos");
             System.out.println(error);
         }
+    }
+
+    public int verificarEstudiantesActivos() {
+        for ( HiloEstudiante estudiante : estudiantes ) {
+            if ( estudiante.socket.isClosed() ) {
+                estudiantesActivos--;
+            }
+        }
+        return estudiantesActivos;
     }
 
 }

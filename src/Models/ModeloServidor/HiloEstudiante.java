@@ -40,36 +40,19 @@ public class HiloEstudiante extends Thread
         entrada = new ObjectInputStream(socket.getInputStream());
     }
 
-    public void enviarExamen(Examen examen) {
-        try {
-            salida.writeObject(examen);
-            salida.flush();
-        } catch (IOException IOError) {
-            System.out.println("Error al enviar el examen: ");
-            System.out.println(IOError);
-        }
-    }
-
-    // Recibe mensajes desde el servidor 
+    // Recibe mensajes desde el cliente 
     public void procesarConexion() throws IOException
     {
         do {
             try {
                 Examen examen = (Examen) entrada.readObject();
-
-                System.out.println(examen.getPreguntas().get(0).getEstado());
-
-                if ( !examen.estaTerminado() ) {
-                    multicast.enviarMensaje(examen);
-                    break;
-                } else {
-                    System.out.println("Quisiera ser una mosca...");
-                }
+                multicast.enviarMensaje(examen);
             } catch (ClassNotFoundException error) {
                 System.out.println("Se recibió un tipo de dato incorrecto: " + error);
                 break;
             } catch ( IOException IOError ) {
-                System.out.println("El Estudiante #" + idEstudiante + " se fue...");
+                if (!socket.isClosed())
+                    System.out.println("Estudiante #" + idEstudiante + " se fue...");
                 break;
             }
         } while (!socket.isClosed());
