@@ -5,7 +5,7 @@ import java.util.List;
 
 public class Pregunta implements Serializable {
 
-    private static final long serialVersionUID = 8799656478674716638L;
+    private static final long serialVersionUID = 8799656478674716639L;
 
 
     private final String[] estados = {"LIBRE", "OCUPADA", "RESPONDIDA"};

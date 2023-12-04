@@ -80,9 +80,14 @@ public class GUI extends JFrame
 
         // Eventos 
         EventListener eventListener = new EventListener();
+        
+        //pCrearExamen
         bCargarPreguntas.addActionListener(eventListener);
         bCrearExamen.addActionListener(eventListener);
+
+        // pExamenes
         bVisualizarExamen.addActionListener(eventListener);
+        bIniciarExamen.addActionListener(eventListener);
 
         
         
@@ -227,6 +232,11 @@ public class GUI extends JFrame
                 if ( !nombreExamen.isEmpty()  )
                     setTAreaVisualizarExamen(ControladorServidor.getExamenByName(nombreExamen).toString());
                     
+            }
+            if ( e.getSource() == bIniciarExamen ) {
+                String nombreExamen = (String) cbExamenes.getSelectedItem();
+                if ( !nombreExamen.isEmpty() )
+                    ControladorServidor.enviarExamenMulticast(ControladorServidor.getExamenByName(nombreExamen));
             }
         }
     }

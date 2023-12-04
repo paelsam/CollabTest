@@ -80,4 +80,8 @@ public class ConexionServidor extends Thread {
         return estudiantesActivos;
     }
 
+    public Multicast getMulticast() {
+        return multicast;
+    }
+
 }

@@ -56,4 +56,9 @@ public class ControladorServidor {
         return null;
     }
 
+    public static void enviarExamenMulticast(Examen examen) {
+        System.out.println("Examen enviado: " + examen.getNombre());
+        servidor.getMulticast().enviarMensaje(examen);
+    }
+
 }
