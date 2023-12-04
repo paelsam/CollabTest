@@ -50,8 +50,8 @@ public class Multicast extends Thread {
         while (true) {
             try {
                 socketMulticast.receive(dtp);
-                System.out.println("paso");
                 examen = (Examen) deserializarObjeto(dtp.getData());
+                System.out.println(examen.getNombre());
                 cont.setExamen(examen);
                 System.out.println(cont.getExamen().getNombre());
 

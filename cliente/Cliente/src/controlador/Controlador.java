@@ -17,7 +17,7 @@ public class Controlador {
         this.gui = new Gui(this);
         this.con = new conexion(gui, this);
         // provicional
-        this.examen = new Examen("andres", 14, "text");
+        // this.examen = new Examen("andres", 14, "text");
 
     }
 

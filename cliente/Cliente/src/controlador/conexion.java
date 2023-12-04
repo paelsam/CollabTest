@@ -1,12 +1,10 @@
 package controlador;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 
-import Models.Examen;
 import views.Gui;
 
 public class conexion {
@@ -50,7 +48,6 @@ public class conexion {
     public void obtenerFlujos() throws IOException {
         salida = new ObjectOutputStream((cliente.getOutputStream()));
         salida.flush();
-        ;
         entrada = new ObjectInputStream(cliente.getInputStream());
         gui.mostrarMensaje("se obtuvieron los flujos E/S");
     }
@@ -88,36 +85,6 @@ public class conexion {
         } catch (Exception e) {
             gui.mostrarMensaje("Error al mandar datos al servidor");
         }
-    }
-
-    public void enviarExamen() {
-        try {
-            byte[] examenSerializado = serializarObjeto(cont.getExamen());
-            salida.writeObject(examenSerializado);
-            salida.flush();
-            gui.mostrarMensaje("Error al mandar datos al servidor");
-
-        } catch (Exception e) {
-            gui.mostrarMensaje("Error al mandar datos al servidor");
-            e.printStackTrace();
-        }
-
-    }
-
-    public byte[] serializarObjeto(Examen objeto) throws IOException {
-
-        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream(6400);
-        ObjectOutputStream objectOutputStream = new ObjectOutputStream(byteArrayOutputStream);
-
-        objectOutputStream.writeObject(objeto);
-        objectOutputStream.flush();
-
-        byte[] datosSerializados = byteArrayOutputStream.toByteArray();
-
-        objectOutputStream.close();
-        byteArrayOutputStream.close();
-
-        return datosSerializados;
     }
 
 }

@@ -21,6 +21,14 @@ public class Controlador {
         Examenes.add(new Examen(gui.tNombre.getText(), Integer.parseInt(gui.tTiempo.getText()), gui.tRuta.getText()));
     }
 
+    public void setExamen(Examen examen) {
+        for (int i = 0; i < Examenes.size(); i++) {
+            if (Examenes.get(i) == examen) {
+                Examenes.set(i, examen);
+            }
+        }
+    }
+
     public static void main(String[] args) {
         Controlador cont = new Controlador();
 

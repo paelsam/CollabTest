@@ -11,7 +11,7 @@ import java.util.List;
 
 public class Examen implements Serializable {
     private String nombre;
-    private int tiempoDuracion; // en minutos
+    private int tiempoDuracion;
     private List<String> listaIntegrantes;
     private float notaFinal;
     private int contador = 0;
