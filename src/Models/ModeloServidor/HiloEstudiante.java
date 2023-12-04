@@ -17,11 +17,11 @@ public class HiloEstudiante extends Thread {
 
     private int idEstudiante;
 
-    public HiloEstudiante(int idEstudiante, Socket socket, Multicast multicast, ConexionServidor con) {
+    public HiloEstudiante(int idEstudiante, Socket socket, Multicast multicast) {
         this.idEstudiante = idEstudiante;
         this.socket = socket;
         this.multicast = multicast;
-        this.con = con;
+
     }
 
     @Override

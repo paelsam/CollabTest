@@ -66,7 +66,7 @@ public class ConexionServidor extends Thread {
         estudiantesActivos++;
         numeroEstudiantes++;
         System.out.println("Estudiante #" + numeroEstudiantes + " conectado!");
-        HiloEstudiante estudiante = new HiloEstudiante(numeroEstudiantes, socket, multicast, this);
+        HiloEstudiante estudiante = new HiloEstudiante(numeroEstudiantes, socket, multicast);
         estudiantes.add(estudiante);
 
         try {
