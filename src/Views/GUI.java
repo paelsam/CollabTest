@@ -21,6 +21,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 
 import Controllers.ControladorServidor;
 import Models.Examen;
+import Models.ModeloServidor.HiloEstudiante;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -76,6 +77,7 @@ public class GUI extends JFrame {
         setTitle("CollabTest");
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setSize(800, 400);
+        iniciarComponentes();
         // setResizable(false);
 
     }
@@ -320,12 +322,24 @@ public class GUI extends JFrame {
     }
 
     public void cambiarColorCirclesLabel(int numCircles, Color color) {
-        // todo: Arreglar esto
 
-        for (int i = 0; i < numCircles; i++) {
-            lEstudiantesConectados[i].setBackground(color);
-        }
+        lEstudiantesConectados[numCircles].setBackground(color);
+
         pExamenes.updateUI();
+    }
+
+    public void cambiarColorCirclesLabel2() {
+        ArrayList<HiloEstudiante> estudiantes = ControladorServidor.servidor.getEstudiantes();
+
+        for (int i = 0; i < estudiantes.size(); i++) {
+            if (estudiantes.get(i).socket.isClosed()) {
+                cambiarColorCirclesLabel(i, Color.GRAY);
+
+            } else {
+                cambiarColorCirclesLabel(i, Color.GREEN);
+            }
+        }
+
     }
 
     // Getters pCrearExamen

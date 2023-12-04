@@ -11,7 +11,7 @@ import Views.GUI;
 public class ControladorServidor {
 
     private static GUI gui;
-    private static ConexionServidor servidor;
+    public static ConexionServidor servidor;
     private static InformeExamenes informeExamenes;
 
     public ControladorServidor() {
@@ -20,14 +20,13 @@ public class ControladorServidor {
         ControladorServidor.informeExamenes.cargarHistorial();
         gui = new GUI();
         servidor.start();
-        gui.iniciarComponentes();
+
     }
 
     public static void serverLoop() {
         while (true) {
             if (gui.getPExamenes().isShowing()) {
-                // Hay que cambiar esto
-                gui.cambiarColorCirclesLabel(servidor.verificarEstudiantesActivos(), Color.GREEN);
+                gui.cambiarColorCirclesLabel2();
             }
         }
 
@@ -85,6 +84,14 @@ public class ControladorServidor {
 
     public static void setInformeExamenes(InformeExamenes informeExamenes) {
         ControladorServidor.informeExamenes = informeExamenes;
+    }
+
+    public static ConexionServidor getServidor() {
+        return servidor;
+    }
+
+    public static void setServidor(ConexionServidor servidor) {
+        ControladorServidor.servidor = servidor;
     }
 
 }

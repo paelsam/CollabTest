@@ -10,10 +10,11 @@ import Models.Examen;
 public class ConexionServidor extends Thread {
 
     ServerSocket servidor;
-    ArrayList<Examen> examenes; 
-    ArrayList<HiloEstudiante> estudiantes;
+    ArrayList<Examen> examenes;
+    private ArrayList<HiloEstudiante> estudiantes;
     int numeroEstudiantes = 0;
     int estudiantesActivos = 0;
+    // public int estudiantesInactivos=0;
 
     // Para el multicast
     Multicast multicast;
@@ -30,7 +31,7 @@ public class ConexionServidor extends Thread {
         try {
             System.out.println("Conectando por el puerto " + PUERTO);
             servidor = new ServerSocket(PUERTO);
-            System.out.println("Servidor iniciado " + servidor); 
+            System.out.println("Servidor iniciado " + servidor);
         } catch (IOException error) {
             System.out.println("Error al conectar al ServerSocket: ");
             System.out.println(error);
@@ -39,17 +40,22 @@ public class ConexionServidor extends Thread {
 
     @Override
     public void run() {
+
         while (true) {
             try {
-                if ( numeroEstudiantes <= 2 )
+                if (numeroEstudiantes <= 2) {
                     adicionarEstudiante(servidor.accept());
-                else 
+
+                }
+
+                else
                     break;
             } catch (IOException error) {
                 System.out.println("Error al aceptar estudiantes");
                 System.out.println(error);
             }
         }
+
     }
 
     public void addExamen(Examen examen) {
@@ -60,8 +66,9 @@ public class ConexionServidor extends Thread {
         estudiantesActivos++;
         numeroEstudiantes++;
         System.out.println("Estudiante #" + numeroEstudiantes + " conectado!");
-        HiloEstudiante estudiante = new HiloEstudiante( numeroEstudiantes, socket, multicast);
+        HiloEstudiante estudiante = new HiloEstudiante(numeroEstudiantes, socket, multicast, this);
         estudiantes.add(estudiante);
+
         try {
             estudiante.obtenerFlujos();
             estudiante.start();
@@ -71,17 +78,29 @@ public class ConexionServidor extends Thread {
         }
     }
 
-    public int verificarEstudiantesActivos() {
-        for ( HiloEstudiante estudiante : estudiantes ) {
-            if ( estudiante.socket.isClosed() ) {
-                estudiantesActivos--;
-            }
-        }
-        return estudiantesActivos;
-    }
+    /*
+     * public int verificarEstudiantesActivos() {
+     * for (HiloEstudiante estudiante : estudiantes) {
+     * if (estudiante.socket.isClosed()) {
+     * estudiantesActivos--;
+     * // ++;
+     * }
+     * System.out.println(estudiantesActivos);
+     * }
+     * return estudiantesActivos;
+     * }
+     */
 
     public Multicast getMulticast() {
         return multicast;
+    }
+
+    public ArrayList<HiloEstudiante> getEstudiantes() {
+        return estudiantes;
+    }
+
+    public void setEstudiantes(ArrayList<HiloEstudiante> estudiantes) {
+        this.estudiantes = estudiantes;
     }
 
 }
