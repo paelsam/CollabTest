@@ -1,6 +1,8 @@
 package Views;
 
 import javax.swing.BorderFactory;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
@@ -8,28 +10,34 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JSpinner;
 import javax.swing.JTabbedPane;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.SwingConstants;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import Controllers.ControladorServidor;
+import Models.Examen;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.GridLayout;
+import java.awt.Insets;
 import java.awt.TextArea;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.util.ArrayList;
 
-public class GUI extends JFrame
-{
+public class GUI extends JFrame {
 
     // private static Color Negro = new Color(10, 13, 34);
     // private static Color Azul = new Color(41, 107, 170);
@@ -38,31 +46,37 @@ public class GUI extends JFrame
     // private static Color Amarillo = new Color(10, 13, 34);
     // private static Color Rojo = new Color(10, 13, 34);
 
-
-
     JTabbedPane tabsContainer;
-    JPanel pCrearExamen, pExamenes, pInformesExamenes;
-    
+    JPanel pCrearExamen, pExamenes, pInformesExamenes, pInformesIzquierda, pInformesDerecha;
 
     // Elementos de pCrearExamen
-    JLabel lNombreExamen; JTextField tfNombreExamen;    
-    JLabel lPreguntasExamen; JButton bCargarPreguntas; 
-    JLabel lRutaPreguntas; JFileChooser fcSeleccionarPreguntas;
-    JLabel lTiempoExamen; JSpinner sTiempoMinutos; JSpinner sTiempoSegundos;
-    JButton bCrearExamen;
+    JLabel lNombreExamen;
+    JTextField tfNombreExamen;
+    JLabel lPreguntasExamen;
+    JButton bCargarPreguntas;
+    JLabel lRutaPreguntas;
+    JFileChooser fcSeleccionarPreguntas, fcSeleccionarInformes;
+    JLabel lTiempoExamen;
+    JSpinner sTiempoMinutos;
+    JSpinner sTiempoSegundos;
+    JButton bCrearExamen, bCargarInforme, bGuardarHistorial;
+    JComboBox comboSeleccionarExamen;
 
     // Elemenetos de pExamenes
     JComboBox<String> cbExamenes;
     TextArea tAreaVisualizarExamen;
-    JButton bIniciarExamen; JButton bVisualizarExamen;
+    JTextArea tAreaVisualizarInforme;
+    JButton bIniciarExamen;
+    JButton bVisualizarExamen;
     CircularLabel lEstudiantesConectados[] = new CircularLabel[3];
-    
+    ControladorServidor cont;
 
     public GUI() {
+
         setTitle("CollabTest");
         setDefaultCloseOperation(EXIT_ON_CLOSE);
-        setSize(800, 200);
-        setResizable(false);
+        setSize(800, 400);
+        // setResizable(false);
 
     }
 
@@ -72,16 +86,15 @@ public class GUI extends JFrame
         pExamenes();
         pInformesExamenes();
 
-        
         tabsContainer.addTab("Crear Examen", pCrearExamen);
         tabsContainer.addTab("Exámenes", pExamenes);
         tabsContainer.addTab("Informes", pInformesExamenes);
         add(tabsContainer);
 
-        // Eventos 
+        // Eventos
         EventListener eventListener = new EventListener();
-        
-        //pCrearExamen
+
+        // pCrearExamen
         bCargarPreguntas.addActionListener(eventListener);
         bCrearExamen.addActionListener(eventListener);
 
@@ -89,18 +102,18 @@ public class GUI extends JFrame
         bVisualizarExamen.addActionListener(eventListener);
         bIniciarExamen.addActionListener(eventListener);
 
-        
-        
+        // pInformes
+        comboSeleccionarExamen.addActionListener(eventListener);
+
         setVisible(true);
         pack();
     }
-    
+
     public void pCrearExamen() {
-        pCrearExamen= new JPanel(new BorderLayout(10, 10));
+        pCrearExamen = new JPanel(new BorderLayout(10, 10));
 
         // Sub panel para añadir componentes
         JPanel spFormularioCrearExamen = new JPanel(new GridLayout(4, 3, 10, 10));
-
 
         lNombreExamen = new JLabel("Nombre del examen:");
         tfNombreExamen = new JTextField(20);
@@ -117,15 +130,22 @@ public class GUI extends JFrame
 
         lTiempoExamen = new JLabel("Tiempo del examen:");
 
-        sTiempoMinutos = new JSpinner(new SpinnerNumberModel(1,1,60,1));
-        sTiempoSegundos = new JSpinner(new SpinnerNumberModel(0,0,60,1));
+        sTiempoMinutos = new JSpinner(new SpinnerNumberModel(1, 1, 60, 1));
+        sTiempoSegundos = new JSpinner(new SpinnerNumberModel(0, 0, 60, 1));
         bCrearExamen = new JButton("Crear Examen");
 
-        spFormularioCrearExamen.add(lNombreExamen); spFormularioCrearExamen.add(tfNombreExamen); spFormularioCrearExamen.add(new JPanel(new BorderLayout()));
-        spFormularioCrearExamen.add(lPreguntasExamen); spFormularioCrearExamen.add(bCargarPreguntas); 
-        spFormularioCrearExamen.add(lRutaPreguntas); spFormularioCrearExamen.add(lTiempoExamen);
-        spFormularioCrearExamen.add(sTiempoMinutos); spFormularioCrearExamen.add(sTiempoSegundos); 
-        spFormularioCrearExamen.add(new JPanel(new BorderLayout()));spFormularioCrearExamen.add(bCrearExamen); spFormularioCrearExamen.add(new JPanel(new BorderLayout()));
+        spFormularioCrearExamen.add(lNombreExamen);
+        spFormularioCrearExamen.add(tfNombreExamen);
+        spFormularioCrearExamen.add(new JPanel(new BorderLayout()));
+        spFormularioCrearExamen.add(lPreguntasExamen);
+        spFormularioCrearExamen.add(bCargarPreguntas);
+        spFormularioCrearExamen.add(lRutaPreguntas);
+        spFormularioCrearExamen.add(lTiempoExamen);
+        spFormularioCrearExamen.add(sTiempoMinutos);
+        spFormularioCrearExamen.add(sTiempoSegundos);
+        spFormularioCrearExamen.add(new JPanel(new BorderLayout()));
+        spFormularioCrearExamen.add(bCrearExamen);
+        spFormularioCrearExamen.add(new JPanel(new BorderLayout()));
 
         pCrearExamen.add(spFormularioCrearExamen, BorderLayout.CENTER);
     }
@@ -147,7 +167,6 @@ public class GUI extends JFrame
         lElegirExamen.setHorizontalAlignment(SwingConstants.CENTER);
         lElegirExamen.setVerticalAlignment(SwingConstants.CENTER);
 
-
         JLabel lVisualizarExamen = new JLabel("Visualizar examen:");
         lVisualizarExamen.setFont(new Font("Arial", Font.BOLD, 14));
         lVisualizarExamen.setHorizontalAlignment(SwingConstants.CENTER);
@@ -157,7 +176,6 @@ public class GUI extends JFrame
         bIniciarExamen.setPreferredSize(new Dimension(80, 30));
         bVisualizarExamen = new JButton("Ver");
         bVisualizarExamen.setPreferredSize(new Dimension(80, 30));
-        
 
         JLabel lTextEstudiantesConectados = new JLabel("Estudiantes en línea:");
         lTextEstudiantesConectados.setFont(new Font("Arial", Font.BOLD, 14));
@@ -179,22 +197,22 @@ public class GUI extends JFrame
 
         pOeste.setPreferredSize(new Dimension(200, this.getHeight()));
         pOeste.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-        
+
         pEste.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 
         pNorte.add(lTitulo, BorderLayout.CENTER);
-        
+
         pOeste.add(lElegirExamen);
         pOeste.add(cbExamenes);
         pOeste.add(bIniciarExamen);
         pOeste.add(bVisualizarExamen);
         pOeste.add(lTextEstudiantesConectados);
-        for ( CircularLabel lEstudiante : lEstudiantesConectados )
+        for (CircularLabel lEstudiante : lEstudiantesConectados)
             pOeste.add(lEstudiante);
-            
+
         pEste.add(lVisualizarExamen, BorderLayout.NORTH);
         pEste.add(tAreaVisualizarExamen, BorderLayout.CENTER);
-        
+
         pExamenes.add(pNorte, BorderLayout.NORTH);
         pExamenes.add(pOeste, BorderLayout.WEST);
         pExamenes.add(pEste, BorderLayout.CENTER);
@@ -202,42 +220,71 @@ public class GUI extends JFrame
 
     public void pInformesExamenes() {
         pInformesExamenes = new JPanel(new BorderLayout());
-    }
 
+        pInformesIzquierda = new JPanel(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+
+        tAreaVisualizarInforme = new JTextArea(20, 30);
+        JScrollPane scrollPane = new JScrollPane(tAreaVisualizarInforme);
+
+        String[] opciones = ControladorServidor.getNombreHistorialExamenes();
+        comboSeleccionarExamen = new JComboBox<>(opciones);
+        gbc.gridx = 0;
+        gbc.gridy = 1;
+        pInformesIzquierda.add(comboSeleccionarExamen, gbc);
+
+        bGuardarHistorial = new JButton("GuardarHistorial");
+        gbc.gridx = 0;
+        gbc.gridy = 2;
+        pInformesIzquierda.add(bGuardarHistorial, gbc);
+
+        fcSeleccionarInformes = new JFileChooser();
+        fcSeleccionarInformes.setCurrentDirectory(new File("src\\assets\\informes"));
+        FileNameExtensionFilter filter = new FileNameExtensionFilter("Archivos de texto (.txt)", "txt", "text");
+        fcSeleccionarInformes.setFileFilter(filter);
+
+        pInformesExamenes.add(pInformesIzquierda, BorderLayout.WEST);
+        pInformesExamenes.add(scrollPane, BorderLayout.CENTER);
+
+    }
 
     class EventListener implements ActionListener {
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            if ( e.getSource() == bCargarPreguntas ) {
-                switch(fcSeleccionarPreguntas.showSaveDialog(null)) {
+            if (e.getSource() == bCargarPreguntas) {
+                switch (fcSeleccionarPreguntas.showSaveDialog(null)) {
                     case JFileChooser.APPROVE_OPTION:
-                        if ( fcSeleccionarPreguntas.getSelectedFile().exists() )
+                        if (fcSeleccionarPreguntas.getSelectedFile().exists())
                             lRutaPreguntas.setText(fcSeleccionarPreguntas.getSelectedFile().getName());
                         break;
                     default:
                         break;
-                };
+                }
+                ;
             }
-            if ( e.getSource() == bCrearExamen ) {
-                if ( !getTfNombreExamen().isEmpty() && !getRutaPreguntas().isEmpty() ) {
+            if (e.getSource() == bCrearExamen) {
+                if (!getTfNombreExamen().isEmpty() && !getRutaPreguntas().isEmpty()) {
                     ControladorServidor.crearExamen();
                     addItems(ControladorServidor.getNombreExamenes());
-                }
-                else
+                } else
                     mostrarMensaje("Llena todos los campos correctamente!", JOptionPane.ERROR_MESSAGE);
             }
-            if ( e.getSource() == bVisualizarExamen ) {
+            if (e.getSource() == bVisualizarExamen) {
                 String nombreExamen = (String) cbExamenes.getSelectedItem();
-                if ( !nombreExamen.isEmpty()  )
+                if (!nombreExamen.isEmpty())
                     setTAreaVisualizarExamen(ControladorServidor.getExamenByName(nombreExamen).toString());
-                    
+
             }
-            if ( e.getSource() == bIniciarExamen ) {
+            if (e.getSource() == bIniciarExamen) {
                 String nombreExamen = (String) cbExamenes.getSelectedItem();
-                if ( !nombreExamen.isEmpty() )
+                if (!nombreExamen.isEmpty())
                     ControladorServidor.enviarExamenMulticast(ControladorServidor.getExamenByName(nombreExamen));
             }
+
+            String seleccion = comboSeleccionarExamen.getSelectedItem().toString();
+            String stringExamen = ControladorServidor.getInformeExamenes().verHistorialPorExamen(seleccion);
+            setTAreaVisualizarInforme(stringExamen);
         }
     }
 
@@ -247,13 +294,17 @@ public class GUI extends JFrame
 
     // Métodos de pExámenes
     public void addItems(String[] nombresExamenes) {
-        for (String nombreExamen : nombresExamenes ) {
+        for (String nombreExamen : nombresExamenes) {
             cbExamenes.addItem(nombreExamen);
         }
     }
 
     public void setTAreaVisualizarExamen(String text) {
         tAreaVisualizarExamen.setText(text);
+    }
+
+    public void setTAreaVisualizarInforme(String text) {
+        tAreaVisualizarInforme.setText(text);
     }
 
     public CircularLabel crearLEstudiante() {
@@ -269,15 +320,15 @@ public class GUI extends JFrame
     }
 
     public void cambiarColorCirclesLabel(int numCircles, Color color) {
-       // todo: Arreglar esto
+        // todo: Arreglar esto
 
-        for ( int i = 0; i < numCircles; i++) {
+        for (int i = 0; i < numCircles; i++) {
             lEstudiantesConectados[i].setBackground(color);
         }
         pExamenes.updateUI();
     }
 
-    // Getters pCrearExamen 
+    // Getters pCrearExamen
     public String getTfNombreExamen() {
         return this.tfNombreExamen.getText();
     }

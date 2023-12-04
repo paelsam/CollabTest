@@ -1,7 +1,7 @@
 package Controllers;
 
-
 import java.awt.Color;
+import java.util.ArrayList;
 
 import Models.Examen;
 import Models.InformeExamenes;
@@ -17,6 +17,7 @@ public class ControladorServidor {
     public ControladorServidor() {
         ControladorServidor.servidor = new ConexionServidor(10000);
         ControladorServidor.informeExamenes = new InformeExamenes();
+        ControladorServidor.informeExamenes.cargarHistorial();
         gui = new GUI();
         servidor.start();
         gui.iniciarComponentes();
@@ -24,12 +25,12 @@ public class ControladorServidor {
 
     public static void serverLoop() {
         while (true) {
-            if ( gui.getPExamenes().isShowing() ) {
+            if (gui.getPExamenes().isShowing()) {
                 // Hay que cambiar esto
                 gui.cambiarColorCirclesLabel(servidor.verificarEstudiantesActivos(), Color.GREEN);
             }
         }
-            
+
     }
 
     public static void crearExamen() {
@@ -48,8 +49,8 @@ public class ControladorServidor {
     }
 
     public static Examen getExamenByName(String name) {
-        for (Examen examen : informeExamenes.getExamenes() ){
-            if ( examen.getNombre().equals(name) )
+        for (Examen examen : informeExamenes.getExamenes()) {
+            if (examen.getNombre().equals(name))
                 return examen;
             continue;
         }
@@ -59,6 +60,31 @@ public class ControladorServidor {
     public static void enviarExamenMulticast(Examen examen) {
         System.out.println("Examen enviado: " + examen.getNombre());
         servidor.getMulticast().enviarMensaje(examen);
+    }
+
+    public static String[] getNombreHistorialExamenes() {
+        String[] nombreExamenes = new String[informeExamenes.getHistorialExamenes().size()];
+        ArrayList<Examen> examenes = informeExamenes.getHistorialExamenes();
+        for (int i = 0; i < examenes.size(); i++) {
+            nombreExamenes[i] = examenes.get(i).getNombre();
+        }
+        return nombreExamenes;
+    }
+
+    public static GUI getGui() {
+        return gui;
+    }
+
+    public static void setGui(GUI gui) {
+        ControladorServidor.gui = gui;
+    }
+
+    public static InformeExamenes getInformeExamenes() {
+        return informeExamenes;
+    }
+
+    public static void setInformeExamenes(InformeExamenes informeExamenes) {
+        ControladorServidor.informeExamenes = informeExamenes;
     }
 
 }
