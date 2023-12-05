@@ -18,7 +18,6 @@ import javax.swing.SwingConstants;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import Controllers.ControladorServidor;
-import Models.Examen;
 import Models.ModeloServidor.HiloEstudiante;
 
 import java.awt.BorderLayout;
@@ -29,7 +28,6 @@ import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
-import java.awt.Insets;
 import java.awt.TextArea;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -74,7 +72,7 @@ public class GUI extends JFrame {
 
         setTitle("CollabTest");
         setDefaultCloseOperation(EXIT_ON_CLOSE);
-        setSize(800, 400);
+        setSize(800, 200);
         iniciarComponentes();
         // setResizable(false);
 
@@ -101,11 +99,6 @@ public class GUI extends JFrame {
         // pExamenes
         bVisualizarExamen.addActionListener(eventListener);
         bIniciarExamen.addActionListener(eventListener);
-        cbExamenes.addItemListener(e -> {
-            if (cbExamenes.getSelectedIndex() > 0) {
-               System.out.println("Index = " + cbExamenes.getSelectedIndex());
-            }
-         });
 
         // pInformes
         comboSeleccionarExamen.addActionListener(eventListener);
@@ -128,7 +121,7 @@ public class GUI extends JFrame {
         lRutaPreguntas = new JLabel("No has seleccionado un archivo"); // Se añadirá la ruta
 
         fcSeleccionarPreguntas = new JFileChooser();
-        fcSeleccionarPreguntas.setCurrentDirectory(new File("src\\assets\\preguntas"));
+        fcSeleccionarPreguntas.setCurrentDirectory(new File("src\\assets"));
         // Filtrador de archivos, solo acepta txt
         FileNameExtensionFilter filter = new FileNameExtensionFilter("Archivos de texto (.txt)", "txt", "text");
         fcSeleccionarPreguntas.setFileFilter(filter);
@@ -188,7 +181,6 @@ public class GUI extends JFrame {
         lTextEstudiantesConectados.setVerticalAlignment(SwingConstants.CENTER);
 
         cbExamenes = new JComboBox<>();
-        cbExamenes.addItem("Selecciona");
         cbExamenes.setPreferredSize(new Dimension(150, 30));
 
         // Creando labels para estudiantes conectados
@@ -279,9 +271,12 @@ public class GUI extends JFrame {
                     mostrarMensaje("Escoge un examen disponible!", JOptionPane.ERROR_MESSAGE);
             }
 
-            String seleccion = comboSeleccionarExamen.getSelectedItem().toString();
-            String stringExamen = ControladorServidor.getInformeExamenes().verHistorialPorExamen(seleccion);
-            setTAreaVisualizarInforme(stringExamen);
+            if ( !(comboSeleccionarExamen.getSelectedItem() == null) ) {
+                String seleccion = comboSeleccionarExamen.getSelectedItem().toString();
+                String stringExamen = ControladorServidor.getInformeExamenes().verHistorialPorExamen(seleccion);
+                setTAreaVisualizarInforme(stringExamen);
+            }
+
         }
     }
 

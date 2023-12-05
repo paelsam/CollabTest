@@ -13,7 +13,6 @@ public class ConexionServidor extends Thread {
     ArrayList<Examen> examenes;
     private ArrayList<HiloEstudiante> estudiantes;
     int numeroEstudiantes = 0;
-    int estudiantesActivos = 0;
 
     // Para el multicast
     Multicast multicast;
@@ -59,11 +58,11 @@ public class ConexionServidor extends Thread {
     }
 
     public void adicionarEstudiante(Socket socket) {
-        estudiantesActivos++;
         numeroEstudiantes++;
         System.out.println("Estudiante #" + numeroEstudiantes + " conectado!");
         HiloEstudiante estudiante = new HiloEstudiante(numeroEstudiantes, socket, multicast);
         estudiantes.add(estudiante);
+        System.out.println(estudiantes.size());
 
         try {
             estudiante.obtenerFlujos();
