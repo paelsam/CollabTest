@@ -80,25 +80,4 @@ public class InformeExamenes {
         }
         return resultado;
     }
-
-    public static void main(String[] args) {
-
-        Examen examen1 = new Examen("andres", 12, "src\\assets\\preguntas1.txt");
-
-        // Examen examen2 = new Examen("caca", 12, "src\\assets\\preguntas1.txt");
-        // Examen examen3 = new Examen("oca", 12, "src\\assets\\preguntas1.txt");
-        // InformeExamenes info = new InformeExamenes();
-        // info.addToHistorial(examen1);
-        // info.addToHistorial(examen2);
-        // info.addToHistorial(examen3);
-        // info.guardarHistorial();
-        // InformeExamenes info = new InformeExamenes();
-        // info.cargarHistorial();
-        // System.out.println(info.verHistorialExamenes());
-
-        // System.out.println(examen1.getPreguntas().get(0).getDescripcion());
-        // System.out.println(examen1.getTiempoDuracion());
-        System.out.println(examen1.toString());
-
-    }
 }

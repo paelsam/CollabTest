@@ -14,7 +14,6 @@ public class ConexionServidor extends Thread {
     private ArrayList<HiloEstudiante> estudiantes;
     int numeroEstudiantes = 0;
     int estudiantesActivos = 0;
-    // public int estudiantesInactivos=0;
 
     // Para el multicast
     Multicast multicast;
@@ -43,11 +42,8 @@ public class ConexionServidor extends Thread {
 
         while (true) {
             try {
-                if (numeroEstudiantes <= 2) {
+                if (numeroEstudiantes <= 2)
                     adicionarEstudiante(servidor.accept());
-
-                }
-
                 else
                     break;
             } catch (IOException error) {
@@ -77,19 +73,6 @@ public class ConexionServidor extends Thread {
             System.out.println(error);
         }
     }
-
-    /*
-     * public int verificarEstudiantesActivos() {
-     * for (HiloEstudiante estudiante : estudiantes) {
-     * if (estudiante.socket.isClosed()) {
-     * estudiantesActivos--;
-     * // ++;
-     * }
-     * System.out.println(estudiantesActivos);
-     * }
-     * return estudiantesActivos;
-     * }
-     */
 
     public Multicast getMulticast() {
         return multicast;

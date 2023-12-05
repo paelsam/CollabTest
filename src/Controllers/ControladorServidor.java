@@ -18,7 +18,6 @@ public class ControladorServidor {
     private static Timer temporizador;
 
     // Variables para el temporizador
-    private static int TIEMPO_EXAMEN_SEGUNDOS;
     private static int minutosRestantes, segundosRestantes;
 
     public ControladorServidor() {
@@ -73,7 +72,6 @@ public class ControladorServidor {
 
                 }
             }
-
         }, 0, 1000);
     }
 
@@ -97,6 +95,14 @@ public class ControladorServidor {
         for (int i = 0; i < informeExamenes.getExamenes().size(); i++)
             nombreExamenes[i] = informeExamenes.getExamenes().get(i).getNombre();
         return nombreExamenes;
+    }
+
+    public static void examenTerminado() {
+        if ( examenEscogido.todasPreguntasResueltas() || (minutosRestantes == 0 && segundosRestantes == 0)) {
+            examenEscogido.setTerminaExamen(true);
+            examenEscogido.calcularNotaFinal();
+            enviarExamenMulticast(examenEscogido);
+        }
     }
 
     public static Examen getExamenByName(String nombreExamen) {

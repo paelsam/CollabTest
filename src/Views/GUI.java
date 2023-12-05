@@ -228,6 +228,7 @@ public class GUI extends JFrame {
         pInformesExamenes = new JPanel(new BorderLayout());
 
         pInformesIzquierda = new JPanel(new GridBagLayout());
+        pInformesIzquierda.setPreferredSize(new Dimension(200, this.getHeight()));
         GridBagConstraints gbc = new GridBagConstraints();
 
         tAreaVisualizarInforme = new JTextArea(20, 30);
@@ -235,27 +236,16 @@ public class GUI extends JFrame {
 
         String[] opciones = ControladorServidor.getNombreHistorialExamenes();
         comboSeleccionarExamen = new JComboBox<>(opciones);
+        comboSeleccionarExamen.setPreferredSize(new Dimension(150, 30));
         gbc.gridx = 0;
         gbc.gridy = 1;
         pInformesIzquierda.add(comboSeleccionarExamen, gbc);
 
-        bGuardarHistorial = new JButton("GuardarHistorial");
-        gbc.gridx = 0;
-        gbc.gridy = 2;
-        pInformesIzquierda.add(bGuardarHistorial, gbc);
-
-        fcSeleccionarInformes = new JFileChooser();
-        fcSeleccionarInformes.setCurrentDirectory(new File("src\\assets\\informes"));
-        FileNameExtensionFilter filter = new FileNameExtensionFilter("Archivos de texto (.txt)", "txt", "text");
-        fcSeleccionarInformes.setFileFilter(filter);
-
         pInformesExamenes.add(pInformesIzquierda, BorderLayout.WEST);
         pInformesExamenes.add(scrollPane, BorderLayout.CENTER);
-
     }
 
     class EventListener implements ActionListener {
-
         @Override
         public void actionPerformed(ActionEvent e) {
             if (e.getSource() == bCargarPreguntas) {
@@ -267,7 +257,6 @@ public class GUI extends JFrame {
                     default:
                         break;
                 }
-                ;
             }
             if (e.getSource() == bCrearExamen) {
                 if (!getTfNombreExamen().isEmpty() && !getRutaPreguntas().isEmpty()) {
@@ -328,24 +317,19 @@ public class GUI extends JFrame {
     }
 
     public void cambiarColorCircularLabels(int numCircles, Color color) {
-
         lEstudiantesConectados[numCircles].setBackground(color);
-
         pExamenes.updateUI();
     }
 
     public void cambiarColorCircularLabels() {
         ArrayList<HiloEstudiante> estudiantes = ControladorServidor.getServidor().getEstudiantes();
-
         for (int i = 0; i < estudiantes.size(); i++) {
             if (estudiantes.get(i).socket.isClosed()) {
                 cambiarColorCircularLabels(i, Color.GRAY);
-
             } else {
                 cambiarColorCircularLabels(i, Color.GREEN);
             }
         }
-
     }
 
     // Getters pCrearExamen
