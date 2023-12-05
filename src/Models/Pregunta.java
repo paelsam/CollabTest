@@ -5,6 +5,9 @@ import java.util.List;
 
 public class Pregunta implements Serializable {
 
+    private static final long serialVersionUID = 8799656478674716639L;
+
+
     private final String[] estados = {"LIBRE", "OCUPADA", "RESPONDIDA"};
 
     private final String enunciado;
@@ -77,6 +80,14 @@ public class Pregunta implements Serializable {
         if ( opcionCorrecta.trim().equals(opcion) )
             return true;
         return false;
+    }
+
+    public String toString() {
+        return "Enunciado: " + this.enunciado.trim() + "\n" 
+        + "Descripción: " + this.descripcion + "\n"
+        + "Opciones: " + this.listaOpciones + "\n"
+        + "Opción correcta: " + this.opcionCorrecta + "\n";
+
     }
 
 }
