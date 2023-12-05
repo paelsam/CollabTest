@@ -41,10 +41,7 @@ public class ConexionServidor extends Thread {
 
         while (true) {
             try {
-                if (numeroEstudiantes <= 2)
-                    adicionarEstudiante(servidor.accept());
-                else
-                    break;
+                adicionarEstudiante(servidor.accept());
             } catch (IOException error) {
                 System.out.println("Error al aceptar estudiantes");
                 System.out.println(error);

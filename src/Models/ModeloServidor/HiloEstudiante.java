@@ -21,7 +21,6 @@ public class HiloEstudiante extends Thread {
         this.idEstudiante = idEstudiante;
         this.socket = socket;
         this.multicast = multicast;
-
     }
 
     @Override
@@ -45,6 +44,7 @@ public class HiloEstudiante extends Thread {
     public void procesarConexion() throws IOException {
         do {
             try {
+                System.out.println("Procesando...");
                 Examen examen = (Examen) entrada.readObject();
                 multicast.enviarMensaje(examen);
             } catch (ClassNotFoundException error) {

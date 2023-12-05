@@ -61,12 +61,12 @@ public class ControladorServidor {
         temporizador.scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
-                if ( !(minutosRestantes == 0 && segundosRestantes == 0) ) {
+                if (!(minutosRestantes == 0 && segundosRestantes == 0)) {
                     mostrarTiempoConsola();
                 } else {
                     temporizador.cancel();
                     temporizador.purge();
-                    examenEscogido.setTerminaExamen(true);
+                    examenEscogido.setFinExamen(true);
                     enviarExamenMulticast(examenEscogido);
                     System.out.println("Fin del examen");
 
@@ -98,10 +98,12 @@ public class ControladorServidor {
     }
 
     public static void examenTerminado() {
-        if ( examenEscogido.todasPreguntasResueltas() || (minutosRestantes == 0 && segundosRestantes == 0)) {
-            examenEscogido.setTerminaExamen(true);
+        if (examenEscogido.estaTerminado() || (minutosRestantes == 0 && segundosRestantes == 0)) {
+            examenEscogido.setFinExamen(true);
             examenEscogido.calcularNotaFinal();
             enviarExamenMulticast(examenEscogido);
+            informeExamenes.addToHistorial(examenEscogido);
+            informeExamenes.guardarHistorial();
         }
     }
 
@@ -122,6 +124,7 @@ public class ControladorServidor {
     public static void iniciarExamen(String nombreExamen) {
         if (servidor.getEstudiantes().size() >= 3) {
             examenEscogido = getExamenByName(nombreExamen);
+            iniciarCuentaRegresiva(examenEscogido.getTiempoDuracion());
             enviarExamenMulticast(examenEscogido);
         } else
             gui.mostrarMensaje("Para iniciar el examen deben estar 3 estudiantes conectados (Hay "

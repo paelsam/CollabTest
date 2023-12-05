@@ -20,12 +20,14 @@ public class Examen implements Serializable {
     private List<String> listaIntegrantes;
     private String nombre;
     private String rutaArchivoPreguntas;
+    private boolean finExamen;
 
     public Examen(String nombre, int tiempoDuracion, String rutaArchivo) {
         this.nombre = nombre;
         this.tiempoDuracion = tiempoDuracion;
         this.rutaArchivoPreguntas = rutaArchivo;
         this.preguntas = new ArrayList<>();
+        this.finExamen = false;
         // Inmediatamente se cargan las preguntas
         cargarExamen();
     }
@@ -101,6 +103,14 @@ public class Examen implements Serializable {
     }
 
     // Getters y setters para acceder y modificar los atributos
+
+    public boolean getFinExamen() {
+        return this.finExamen;
+    }
+
+    public void setFinExamen(boolean finExamen) {
+        this.finExamen = finExamen;
+    }
 
     public String getNombre() {
         return this.nombre;
