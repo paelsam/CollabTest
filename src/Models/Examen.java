@@ -12,7 +12,8 @@ import java.util.List;
 public class Examen implements Serializable {
 
     // Por si tenemos una versión actual o antigua del objeto
-    private static final long serialVersionUID = 8799656478674716638L;
+    // Nueva versíón
+    private static final long serialVersionUID = 8799656478674716640L;
 
     private ArrayList<Pregunta> preguntas;
     private float notaFinal;
@@ -20,6 +21,7 @@ public class Examen implements Serializable {
     private List<String> listaIntegrantes;
     private String nombre;
     private String rutaArchivoPreguntas;
+    private boolean terminaExamen;
 
     public Examen(String nombre, int tiempoDuracion, String rutaArchivo) {
         this.nombre = nombre;
@@ -92,7 +94,7 @@ public class Examen implements Serializable {
         }
     }
 
-    public boolean estaTerminado() {
+    public boolean todasPreguntasResueltas() {
         int preguntasResueltas = 0;
         for (Pregunta pregunta : preguntas)
             if (pregunta.getEstado().equals("RESPONDIDA"))
@@ -145,6 +147,14 @@ public class Examen implements Serializable {
         this.notaFinal = notaFinal;
     }
 
+    public boolean getTerminaExamen() {
+        return this.terminaExamen;
+    }
+
+    public void setTerminaExamen(boolean terminaExamen) {
+        this.terminaExamen = terminaExamen;
+    }
+
     public String getRutaArchivoPreguntas() {
         return this.rutaArchivoPreguntas;
     }
@@ -162,7 +172,7 @@ public class Examen implements Serializable {
         double minutos = (double) segundos / 60.0;
         int minutosEnt = segundos / 60;
         double seg = (minutos - minutosEnt) * 60;
-        formato += minutosEnt + " min, " + (int) seg + " seg";
+        formato += minutosEnt + " minutos, " + (int) seg + " segundos";
         return formato;
     }
 

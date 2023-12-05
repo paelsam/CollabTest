@@ -1,7 +1,8 @@
 package Controllers;
 
-import java.awt.Color;
 import java.util.ArrayList;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import Models.Examen;
 import Models.InformeExamenes;
@@ -11,25 +12,77 @@ import Views.GUI;
 public class ControladorServidor {
 
     private static GUI gui;
-    public static ConexionServidor servidor;
+    private static ConexionServidor servidor;
     private static InformeExamenes informeExamenes;
+    private static Examen examenEscogido;
+    private static Timer temporizador;
+
+    // Variables para el temporizador
+    private static int TIEMPO_EXAMEN_SEGUNDOS;
+    private static int minutosRestantes, segundosRestantes;
 
     public ControladorServidor() {
         ControladorServidor.servidor = new ConexionServidor(10000);
         ControladorServidor.informeExamenes = new InformeExamenes();
         ControladorServidor.informeExamenes.cargarHistorial();
-        gui = new GUI();
-        servidor.start();
+        ControladorServidor.gui = new GUI();
+        ControladorServidor.temporizador = new Timer();
 
+        servidor.start();
     }
 
-    public static void serverLoop() {
+    public static void mostrarTiempoConsola() {
+        if (minutosRestantes < 10)
+            System.out.print("0" + minutosRestantes);
+        else
+            System.out.print(minutosRestantes);
+
+        System.out.print(":");
+
+        if (segundosRestantes < 10)
+            System.out.print("0" + segundosRestantes);
+        else
+            System.out.print(segundosRestantes);
+
+        if (segundosRestantes == 0) {
+            if (minutosRestantes != 0) {
+                minutosRestantes--;
+                segundosRestantes = 59;
+            }
+        } else {
+            segundosRestantes--;
+        }
+        System.out.println("");
+    }
+
+    public static void iniciarCuentaRegresiva(int tiempoTotalSegundos) {
+        minutosRestantes = (tiempoTotalSegundos / 60);
+        segundosRestantes = tiempoTotalSegundos % 60;
+
+        temporizador.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                if ( !(minutosRestantes == 0 && segundosRestantes == 0) ) {
+                    mostrarTiempoConsola();
+                } else {
+                    temporizador.cancel();
+                    temporizador.purge();
+                    examenEscogido.setTerminaExamen(true);
+                    enviarExamenMulticast(examenEscogido);
+                    System.out.println("Fin del examen");
+
+                }
+            }
+
+        }, 0, 1000);
+    }
+
+    public static void estudiantesActivos() {
         while (true) {
             if (gui.getPExamenes().isShowing()) {
-                gui.cambiarColorCirclesLabel2();
+                gui.cambiarColorCircularLabels();
             }
         }
-
     }
 
     public static void crearExamen() {
@@ -41,15 +94,14 @@ public class ControladorServidor {
 
     public static String[] getNombreExamenes() {
         String[] nombreExamenes = new String[informeExamenes.getExamenes().size()];
-        for (int i = 0; i < informeExamenes.getExamenes().size(); i++) {
+        for (int i = 0; i < informeExamenes.getExamenes().size(); i++)
             nombreExamenes[i] = informeExamenes.getExamenes().get(i).getNombre();
-        }
         return nombreExamenes;
     }
 
-    public static Examen getExamenByName(String name) {
+    public static Examen getExamenByName(String nombreExamen) {
         for (Examen examen : informeExamenes.getExamenes()) {
-            if (examen.getNombre().equals(name))
+            if (examen.getNombre().equals(nombreExamen))
                 return examen;
             continue;
         }
@@ -59,6 +111,15 @@ public class ControladorServidor {
     public static void enviarExamenMulticast(Examen examen) {
         System.out.println("Examen enviado: " + examen.getNombre());
         servidor.getMulticast().enviarMensaje(examen);
+    }
+
+    public static void iniciarExamen(String nombreExamen) {
+        if (servidor.getEstudiantes().size() >= 3) {
+            examenEscogido = getExamenByName(nombreExamen);
+            enviarExamenMulticast(examenEscogido);
+        } else
+            gui.mostrarMensaje("Para iniciar el examen deben estar 3 estudiantes conectados (Hay "
+                    + servidor.getEstudiantes().size() + " estudiantes).", 0);
     }
 
     public static String[] getNombreHistorialExamenes() {

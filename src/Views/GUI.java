@@ -1,8 +1,6 @@
 package Views;
 
 import javax.swing.BorderFactory;
-import javax.swing.Box;
-import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
@@ -61,7 +59,7 @@ public class GUI extends JFrame {
     JSpinner sTiempoMinutos;
     JSpinner sTiempoSegundos;
     JButton bCrearExamen, bCargarInforme, bGuardarHistorial;
-    JComboBox comboSeleccionarExamen;
+    JComboBox<String> comboSeleccionarExamen;
 
     // Elemenetos de pExamenes
     JComboBox<String> cbExamenes;
@@ -103,6 +101,11 @@ public class GUI extends JFrame {
         // pExamenes
         bVisualizarExamen.addActionListener(eventListener);
         bIniciarExamen.addActionListener(eventListener);
+        cbExamenes.addItemListener(e -> {
+            if (cbExamenes.getSelectedIndex() > 0) {
+               System.out.println("Index = " + cbExamenes.getSelectedIndex());
+            }
+         });
 
         // pInformes
         comboSeleccionarExamen.addActionListener(eventListener);
@@ -185,6 +188,7 @@ public class GUI extends JFrame {
         lTextEstudiantesConectados.setVerticalAlignment(SwingConstants.CENTER);
 
         cbExamenes = new JComboBox<>();
+        cbExamenes.addItem("Selecciona");
         cbExamenes.setPreferredSize(new Dimension(150, 30));
 
         // Creando labels para estudiantes conectados
@@ -281,7 +285,9 @@ public class GUI extends JFrame {
             if (e.getSource() == bIniciarExamen) {
                 String nombreExamen = (String) cbExamenes.getSelectedItem();
                 if (!nombreExamen.isEmpty())
-                    ControladorServidor.enviarExamenMulticast(ControladorServidor.getExamenByName(nombreExamen));
+                    ControladorServidor.iniciarExamen(nombreExamen);
+                else 
+                    mostrarMensaje("Escoge un examen disponible!", JOptionPane.ERROR_MESSAGE);
             }
 
             String seleccion = comboSeleccionarExamen.getSelectedItem().toString();
@@ -321,22 +327,22 @@ public class GUI extends JFrame {
         return pExamenes;
     }
 
-    public void cambiarColorCirclesLabel(int numCircles, Color color) {
+    public void cambiarColorCircularLabels(int numCircles, Color color) {
 
         lEstudiantesConectados[numCircles].setBackground(color);
 
         pExamenes.updateUI();
     }
 
-    public void cambiarColorCirclesLabel2() {
-        ArrayList<HiloEstudiante> estudiantes = ControladorServidor.servidor.getEstudiantes();
+    public void cambiarColorCircularLabels() {
+        ArrayList<HiloEstudiante> estudiantes = ControladorServidor.getServidor().getEstudiantes();
 
         for (int i = 0; i < estudiantes.size(); i++) {
             if (estudiantes.get(i).socket.isClosed()) {
-                cambiarColorCirclesLabel(i, Color.GRAY);
+                cambiarColorCircularLabels(i, Color.GRAY);
 
             } else {
-                cambiarColorCirclesLabel(i, Color.GREEN);
+                cambiarColorCircularLabels(i, Color.GREEN);
             }
         }
 
