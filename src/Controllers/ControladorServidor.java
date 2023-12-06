@@ -39,18 +39,19 @@ public class ControladorServidor {
         servidor.start();
     }
 
-    public static void mostrarTiempoConsola() {
+    public static void tiempoRestanteTexto() {
+        String tiempoRestante = "";
         if (minutosRestantes < 10)
-            System.out.print("0" + minutosRestantes);
+            tiempoRestante += "0" + minutosRestantes;
         else
-            System.out.print(minutosRestantes);
+            tiempoRestante += minutosRestantes;
 
-        System.out.print(":");
+        tiempoRestante += ":";
 
         if (segundosRestantes < 10)
-            System.out.print("0" + segundosRestantes);
+            tiempoRestante += "0" + segundosRestantes;
         else
-            System.out.print(segundosRestantes);
+            tiempoRestante += segundosRestantes;
 
         if (segundosRestantes == 0) {
             if (minutosRestantes != 0) {
@@ -60,17 +61,17 @@ public class ControladorServidor {
         } else {
             segundosRestantes--;
         }
-        System.out.println("");
+        gui.setTiempoRestante(tiempoRestante);
     }
 
     public static void iniciarCuentaRegresiva(int tiempoTotalSegundos) {
         minutosRestantes = (tiempoTotalSegundos / 60);
-        segundosRestantes = tiempoTotalSegundos % 60;
+        segundosRestantes = Math.round(tiempoTotalSegundos % 60);
 
         temporizador.scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
-                if (examenTerminado()) {
+                if (examenEscogido.estaTerminado()) {
                     temporizador.cancel();
                     temporizador.purge();
                     examenEscogido.setFinExamen(true);
@@ -78,7 +79,7 @@ public class ControladorServidor {
                 }
 
                 if (!(minutosRestantes == 0 && segundosRestantes == 0)) {
-                    mostrarTiempoConsola();
+                    tiempoRestanteTexto();
                 } else {
                     temporizador.cancel();
                     temporizador.purge();
