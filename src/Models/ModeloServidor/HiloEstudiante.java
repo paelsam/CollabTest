@@ -13,8 +13,6 @@ public class HiloEstudiante extends Thread {
     Multicast multicast;
     public Socket socket;
 
-    ConexionServidor con;
-
     private int idEstudiante;
 
     public HiloEstudiante(int idEstudiante, Socket socket, Multicast multicast) {
@@ -52,7 +50,6 @@ public class HiloEstudiante extends Thread {
                 break;
             } catch (IOException IOError) {
                 if (!socket.isClosed())
-
                     System.out.println("Estudiante #" + idEstudiante + " se fue...");
                 break;
             }

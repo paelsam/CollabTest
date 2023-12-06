@@ -267,15 +267,19 @@ public class GUI extends JFrame {
                 String nombreExamen = (String) cbExamenes.getSelectedItem();
                 if (!nombreExamen.isEmpty())
                     ControladorServidor.iniciarExamen(nombreExamen);
-                else 
+                else
                     mostrarMensaje("Escoge un examen disponible!", JOptionPane.ERROR_MESSAGE);
             }
 
-            if ( !(comboSeleccionarExamen.getSelectedItem() == null) ) {
+            if (!(comboSeleccionarExamen.getSelectedItem() == null)) {
                 String seleccion = comboSeleccionarExamen.getSelectedItem().toString();
                 String stringExamen = ControladorServidor.getInformeExamenes().verHistorialPorExamen(seleccion);
                 setTAreaVisualizarInforme(stringExamen);
             }
+
+            // ControladorServidor.getInformeExamenes().cargarHistorial();
+
+            String[] opciones = ControladorServidor.getNombreHistorialExamenes();
 
         }
     }
@@ -342,5 +346,17 @@ public class GUI extends JFrame {
 
     public int getTiempoSegundos() {
         return Integer.parseInt(this.sTiempoMinutos.getValue().toString());
+    }
+
+    public JPanel getpInformesIzquierda() {
+        return pInformesIzquierda;
+    }
+
+    public void setpInformesIzquierda(JPanel pInformesIzquierda) {
+        this.pInformesIzquierda = pInformesIzquierda;
+    }
+
+    public void acutualizarPanelInfExamenes() {
+        this.pInformesExamenes.updateUI();
     }
 }

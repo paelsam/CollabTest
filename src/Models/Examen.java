@@ -167,6 +167,15 @@ public class Examen implements Serializable {
         listaIntegrantes.add(nuevoIntegrante);
     }
 
+    public static String convertirSegundosAMinutos(int segundos) {
+        String formato = "";
+        double minutos = (double) segundos / 60.0;
+        int minutosEnt = segundos / 60;
+        double seg = (minutos - minutosEnt) * 60;
+        formato += minutosEnt + " min, " + (int) seg + " seg";
+        return formato;
+    }
+
     public String toString() {
         String preguntasString = "";
         for (Pregunta pregunta : preguntas) {
@@ -176,7 +185,7 @@ public class Examen implements Serializable {
         return "Nombre del examen: " + this.nombre + "\n"
                 + "Archivo de preguntas: " + this.rutaArchivoPreguntas + "\n"
                 + "Integrantes: " + this.listaIntegrantes + "\n"
-                + "Tiempo de duración: " + Math.floor(this.tiempoDuracion / 60) + " minutos" + "\n"
+                + "Tiempo de duración: " + convertirSegundosAMinutos(tiempoDuracion) + "\n"
                 + "Nota final: " + this.notaFinal + "\n"
                 + "Preguntas: " + "\n---------------------------\n" + preguntasString;
     }

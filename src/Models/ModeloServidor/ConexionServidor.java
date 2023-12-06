@@ -5,6 +5,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 
+import Controllers.ControladorServidor;
 import Models.Examen;
 
 public class ConexionServidor extends Thread {
@@ -59,6 +60,7 @@ public class ConexionServidor extends Thread {
         System.out.println("Estudiante #" + numeroEstudiantes + " conectado!");
         HiloEstudiante estudiante = new HiloEstudiante(numeroEstudiantes, socket, multicast);
         estudiantes.add(estudiante);
+        // ControladorServidor.getExamenEscogido().getListaIntegrantes().add(String.valueOf(numeroEstudiantes));
         System.out.println(estudiantes.size());
 
         try {

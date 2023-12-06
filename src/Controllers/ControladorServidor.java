@@ -14,6 +14,15 @@ public class ControladorServidor {
     private static GUI gui;
     private static ConexionServidor servidor;
     private static InformeExamenes informeExamenes;
+
+    public static Examen getExamenEscogido() {
+        return examenEscogido;
+    }
+
+    public static void setExamenEscogido(Examen examenEscogido) {
+        ControladorServidor.examenEscogido = examenEscogido;
+    }
+
     private static Examen examenEscogido;
     private static Timer temporizador;
 
@@ -61,6 +70,13 @@ public class ControladorServidor {
         temporizador.scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
+                if (examenTerminado()) {
+                    temporizador.cancel();
+                    temporizador.purge();
+                    examenEscogido.setFinExamen(true);
+                    enviarExamenMulticast(examenEscogido);
+                }
+
                 if (!(minutosRestantes == 0 && segundosRestantes == 0)) {
                     mostrarTiempoConsola();
                 } else {
@@ -97,14 +113,18 @@ public class ControladorServidor {
         return nombreExamenes;
     }
 
-    public static void examenTerminado() {
+    public static boolean examenTerminado() {
         if (examenEscogido.estaTerminado() || (minutosRestantes == 0 && segundosRestantes == 0)) {
             examenEscogido.setFinExamen(true);
             examenEscogido.calcularNotaFinal();
             enviarExamenMulticast(examenEscogido);
             informeExamenes.addToHistorial(examenEscogido);
             informeExamenes.guardarHistorial();
+            informeExamenes.cargarHistorial();
+
+            return true;
         }
+        return false;
     }
 
     public static Examen getExamenByName(String nombreExamen) {
