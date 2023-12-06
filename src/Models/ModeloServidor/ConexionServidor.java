@@ -39,7 +39,7 @@ public class ConexionServidor extends Thread {
     @Override
     public void run() {
 
-        while (true) {
+        while (numeroEstudiantes < 3) {
             try {
                 adicionarEstudiante(servidor.accept());
             } catch (IOException error) {

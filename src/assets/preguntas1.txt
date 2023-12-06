@@ -7,8 +7,8 @@ cual es el error?,public static String leerArchivo(String rutaArchivo) throws IO
             }
         }
         return contenido.toString();
-},me cago en la leche,mejor no hagas nada,2200,what the fuck,mejor no hagas nada,
-cual es el inventor de el calculo?,,isac newton,gauss,nicola tesla,alber ainstain,isac newton,
+},la variable contenido no esta definida,entra en un ciclo infinito,falta agregar execepciones,la ruta de archivo es incorrecta,la variable contenido no esta definida,
+cual es el inventor de el calculo?,,Isac Newton,Gauss,Nicola Tesla,Alber Ainstain,Isac Newton,
 cual es el error en el siguiente codigo?,public static void main(String[] args) {
         String rutaArchivo = "ruta_del_archivo.txt";  // Reemplaza con la ruta de tu archivo
         try {
@@ -18,4 +18,9 @@ cual es el error en el siguiente codigo?,public static void main(String[] args) 
         } catch (IOException e) {
             e.printStackTrace();
         }
-},no tiene try-catch,le falta println,no es un codigo,ya valimos,ya valimos
+},no tiene try-catch,le falta println,no es un codigo,la ruta de archivo es incorrecta,la ruta de archivo es incorrecta,
+¿Cual es el resultado de ejecutar el siguiente codigo?,def ejemplo_funcion(a; b):
+    return a + b
+
+resultado = ejemplo_funcion(2; 3)
+print(resultado),6,5,23,2,5

@@ -66,16 +66,15 @@ public class GUI extends JFrame {
     JButton bIniciarExamen;
     JButton bVisualizarExamen;
     CircularLabel lEstudiantesConectados[] = new CircularLabel[3];
-    ControladorServidor cont;
+    JLabel lTiempoRestanteText, lTiempoRestante;
+
 
     public GUI() {
 
         setTitle("CollabTest");
         setDefaultCloseOperation(EXIT_ON_CLOSE);
-        setSize(800, 200);
+        setSize(800, 300);
         iniciarComponentes();
-        // setResizable(false);
-
     }
 
     public void iniciarComponentes() {
@@ -153,7 +152,7 @@ public class GUI extends JFrame {
 
         JPanel pNorte = new JPanel(new BorderLayout());
         JPanel pEste = new JPanel(new BorderLayout());
-        JPanel pOeste = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 20));
+        JPanel pOeste = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 15));
 
         JLabel lTitulo = new JLabel("Iniciar examen");
         lTitulo.setFont(new Font("Arial", Font.BOLD, 24));
@@ -179,6 +178,15 @@ public class GUI extends JFrame {
         lTextEstudiantesConectados.setFont(new Font("Arial", Font.BOLD, 14));
         lTextEstudiantesConectados.setHorizontalAlignment(SwingConstants.CENTER);
         lTextEstudiantesConectados.setVerticalAlignment(SwingConstants.CENTER);
+
+        lTiempoRestanteText = new JLabel("Tiempo restante:");
+        lTiempoRestante = new JLabel("00:00");
+
+        lTiempoRestanteText.setFont(new Font("Arial", Font.BOLD, 14));
+        lTiempoRestante.setFont(new Font("Arial", Font.BOLD, 24));
+        lTiempoRestante.setPreferredSize(new Dimension(180, 30));
+        lTiempoRestante.setHorizontalAlignment(SwingConstants.CENTER);
+        lTiempoRestante.setVerticalAlignment(SwingConstants.CENTER);
 
         cbExamenes = new JComboBox<>();
         cbExamenes.setPreferredSize(new Dimension(150, 30));
@@ -207,6 +215,8 @@ public class GUI extends JFrame {
         pOeste.add(lTextEstudiantesConectados);
         for (CircularLabel lEstudiante : lEstudiantesConectados)
             pOeste.add(lEstudiante);
+        pOeste.add(lTiempoRestanteText);
+        pOeste.add(lTiempoRestante);
 
         pEste.add(lVisualizarExamen, BorderLayout.NORTH);
         pEste.add(tAreaVisualizarExamen, BorderLayout.CENTER);
@@ -254,6 +264,10 @@ public class GUI extends JFrame {
                 if (!getTfNombreExamen().isEmpty() && !getRutaPreguntas().isEmpty()) {
                     ControladorServidor.crearExamen();
                     addItems(ControladorServidor.getNombreExamenes());
+                    tfNombreExamen.setText("");
+                    lRutaPreguntas.setText("");
+                    sTiempoMinutos.setValue(1);
+                    sTiempoSegundos.setValue(0);
                 } else
                     mostrarMensaje("Llena todos los campos correctamente!", JOptionPane.ERROR_MESSAGE);
             }
@@ -278,6 +292,10 @@ public class GUI extends JFrame {
             }
 
         }
+    }
+
+    public void setTiempoRestante(String tiempo) {
+        lTiempoRestante.setText(tiempo);
     }
 
     public void mostrarMensaje(String mensaje, int status) {
