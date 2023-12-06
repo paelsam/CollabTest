@@ -36,15 +36,15 @@ import java.util.ArrayList;
 
 public class GUI extends JFrame {
 
-    // private static Color Negro = new Color(10, 13, 34);
-    // private static Color Azul = new Color(41, 107, 170);
-    // private static Color Verde = new Color(10, 13, 34);
-    // private static Color Blanco = new Color(10, 13, 34);
-    // private static Color Amarillo = new Color(10, 13, 34);
-    // private static Color Rojo = new Color(10, 13, 34);
+    private static Color background = new Color (10, 13, 34);
+     private static Color azul = new Color(41, 107, 170);
+     private static Color Verde = new Color(3, 166, 107);
+     private static Color blanco = new Color(252, 255, 255);
+     private static Color Amarillo = new Color(243, 172, 0);
+     private static Color Rojo = new Color(200, 25, 34);
 
     JTabbedPane tabsContainer;
-    JPanel pCrearExamen, pExamenes, pInformesExamenes, pInformesIzquierda, pInformesDerecha;
+    JPanel pCrearExamen, pExamenes, pInformesExamenes, pInformesIzquierda, pInformesDerecha, panelVacio1, panelVacio2,panelVacio3;
 
     // Elementos de pCrearExamen
     JLabel lNombreExamen;
@@ -83,6 +83,8 @@ public class GUI extends JFrame {
         pCrearExamen();
         pExamenes();
         pInformesExamenes();
+        tabsContainer.setBackground(background);
+        tabsContainer.setForeground(blanco);
 
         tabsContainer.addTab("Crear Examen", pCrearExamen);
         tabsContainer.addTab("Exámenes", pExamenes);
@@ -112,13 +114,19 @@ public class GUI extends JFrame {
 
         // Sub panel para añadir componentes
         JPanel spFormularioCrearExamen = new JPanel(new GridLayout(4, 3, 10, 10));
-
         lNombreExamen = new JLabel("Nombre del examen:");
         tfNombreExamen = new JTextField(20);
+        spFormularioCrearExamen.setBackground(background);
+        lNombreExamen.setForeground(blanco);
 
         lPreguntasExamen = new JLabel("Preguntas (txt):");
         bCargarPreguntas = new JButton("Cargar");
         lRutaPreguntas = new JLabel("No has seleccionado un archivo"); // Se añadirá la ruta
+        bCargarPreguntas.setBackground(azul);
+        bCargarPreguntas.setForeground(blanco);
+        lPreguntasExamen.setForeground(blanco);
+        lRutaPreguntas.setForeground(blanco);
+
 
         fcSeleccionarPreguntas = new JFileChooser();
         fcSeleccionarPreguntas.setCurrentDirectory(new File("src\\assets"));
@@ -127,23 +135,31 @@ public class GUI extends JFrame {
         fcSeleccionarPreguntas.setFileFilter(filter);
 
         lTiempoExamen = new JLabel("Tiempo del examen:");
-
         sTiempoMinutos = new JSpinner(new SpinnerNumberModel(1, 1, 60, 1));
         sTiempoSegundos = new JSpinner(new SpinnerNumberModel(0, 0, 60, 1));
         bCrearExamen = new JButton("Crear Examen");
+        bCrearExamen.setBackground(azul);
+        bCrearExamen.setForeground(blanco);
+        lTiempoExamen.setForeground(blanco);
 
+        panelVacio1= new JPanel(new BorderLayout());
+        panelVacio2= new JPanel(new BorderLayout());
+         panelVacio3= new JPanel(new BorderLayout());
+         panelVacio1.setBackground(background);
+         panelVacio2.setBackground(background);
+         panelVacio3.setBackground(background);
         spFormularioCrearExamen.add(lNombreExamen);
         spFormularioCrearExamen.add(tfNombreExamen);
-        spFormularioCrearExamen.add(new JPanel(new BorderLayout()));
+        spFormularioCrearExamen.add(panelVacio1);
         spFormularioCrearExamen.add(lPreguntasExamen);
         spFormularioCrearExamen.add(bCargarPreguntas);
         spFormularioCrearExamen.add(lRutaPreguntas);
         spFormularioCrearExamen.add(lTiempoExamen);
         spFormularioCrearExamen.add(sTiempoMinutos);
         spFormularioCrearExamen.add(sTiempoSegundos);
-        spFormularioCrearExamen.add(new JPanel(new BorderLayout()));
+        spFormularioCrearExamen.add(panelVacio2);
         spFormularioCrearExamen.add(bCrearExamen);
-        spFormularioCrearExamen.add(new JPanel(new BorderLayout()));
+        spFormularioCrearExamen.add(panelVacio3);
 
         pCrearExamen.add(spFormularioCrearExamen, BorderLayout.CENTER);
     }
@@ -155,30 +171,42 @@ public class GUI extends JFrame {
         JPanel pEste = new JPanel(new BorderLayout());
         JPanel pOeste = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 20));
 
+        pNorte.setBackground(background);
+        pEste.setBackground(background);
+        pOeste.setBackground(background);
+
         JLabel lTitulo = new JLabel("Iniciar examen");
         lTitulo.setFont(new Font("Arial", Font.BOLD, 24));
         lTitulo.setHorizontalAlignment(SwingConstants.CENTER);
         lTitulo.setVerticalAlignment(SwingConstants.CENTER);
+        lTitulo.setForeground(blanco);
 
         JLabel lElegirExamen = new JLabel("Elige un examen:");
         lElegirExamen.setFont(new Font("Arial", Font.BOLD, 14));
         lElegirExamen.setHorizontalAlignment(SwingConstants.CENTER);
         lElegirExamen.setVerticalAlignment(SwingConstants.CENTER);
+        lElegirExamen.setForeground(blanco);
 
         JLabel lVisualizarExamen = new JLabel("Visualizar examen:");
         lVisualizarExamen.setFont(new Font("Arial", Font.BOLD, 14));
         lVisualizarExamen.setHorizontalAlignment(SwingConstants.CENTER);
         lVisualizarExamen.setVerticalAlignment(SwingConstants.CENTER);
+        lVisualizarExamen.setForeground(blanco);
 
         bIniciarExamen = new JButton("Iniciar");
         bIniciarExamen.setPreferredSize(new Dimension(80, 30));
         bVisualizarExamen = new JButton("Ver");
         bVisualizarExamen.setPreferredSize(new Dimension(80, 30));
+        bIniciarExamen.setForeground(blanco);
+        bIniciarExamen.setBackground(azul);
+        bVisualizarExamen.setBackground(azul);
+        bVisualizarExamen.setForeground(blanco);
 
         JLabel lTextEstudiantesConectados = new JLabel("Estudiantes en línea:");
         lTextEstudiantesConectados.setFont(new Font("Arial", Font.BOLD, 14));
         lTextEstudiantesConectados.setHorizontalAlignment(SwingConstants.CENTER);
         lTextEstudiantesConectados.setVerticalAlignment(SwingConstants.CENTER);
+        lTextEstudiantesConectados.setForeground(blanco);
 
         cbExamenes = new JComboBox<>();
         cbExamenes.setPreferredSize(new Dimension(150, 30));
@@ -191,12 +219,12 @@ public class GUI extends JFrame {
         tAreaVisualizarExamen = new TextArea(15, 15);
 
         pNorte.setPreferredSize(new Dimension(300, 50));
-        pNorte.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+        pNorte.setBorder(BorderFactory.createLineBorder(blanco));
 
         pOeste.setPreferredSize(new Dimension(200, this.getHeight()));
-        pOeste.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+        pOeste.setBorder(BorderFactory.createLineBorder(blanco));
 
-        pEste.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+        pEste.setBorder(BorderFactory.createLineBorder(blanco));
 
         pNorte.add(lTitulo, BorderLayout.CENTER);
 
@@ -218,9 +246,10 @@ public class GUI extends JFrame {
 
     public void pInformesExamenes() {
         pInformesExamenes = new JPanel(new BorderLayout());
-
+        pInformesExamenes.setBackground(background);
         pInformesIzquierda = new JPanel(new GridBagLayout());
         pInformesIzquierda.setPreferredSize(new Dimension(200, this.getHeight()));
+        pInformesIzquierda.setBackground(background);
         GridBagConstraints gbc = new GridBagConstraints();
 
         tAreaVisualizarInforme = new JTextArea(20, 30);
@@ -229,6 +258,7 @@ public class GUI extends JFrame {
         String[] opciones = ControladorServidor.getNombreHistorialExamenes();
         comboSeleccionarExamen = new JComboBox<>(opciones);
         comboSeleccionarExamen.setPreferredSize(new Dimension(150, 30));
+
         gbc.gridx = 0;
         gbc.gridy = 1;
         pInformesIzquierda.add(comboSeleccionarExamen, gbc);
@@ -320,9 +350,9 @@ public class GUI extends JFrame {
         ArrayList<HiloEstudiante> estudiantes = ControladorServidor.getServidor().getEstudiantes();
         for (int i = 0; i < estudiantes.size(); i++) {
             if (estudiantes.get(i).socket.isClosed()) {
-                cambiarColorCircularLabels(i, Color.GRAY);
+                cambiarColorCircularLabels(i, Rojo);
             } else {
-                cambiarColorCircularLabels(i, Color.GREEN);
+                cambiarColorCircularLabels(i, Verde);
             }
         }
     }
