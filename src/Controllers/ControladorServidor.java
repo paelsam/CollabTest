@@ -75,7 +75,13 @@ public class ControladorServidor {
                     temporizador.cancel();
                     temporizador.purge();
                     examenEscogido.setFinExamen(true);
+                    examenEscogido.setNotaFinal(examenEscogido.calcularNotaFinal());
                     enviarExamenMulticast(examenEscogido);
+                    informeExamenes.addToHistorial(examenEscogido);
+                    informeExamenes.guardarHistorial();
+                    informeExamenes.cargarHistorial();
+                    gui.getpInformesIzquierda().updateUI();
+                    System.out.println("Fin del examen");
                 }
 
                 if (!(minutosRestantes == 0 && segundosRestantes == 0)) {
@@ -84,7 +90,12 @@ public class ControladorServidor {
                     temporizador.cancel();
                     temporizador.purge();
                     examenEscogido.setFinExamen(true);
+                    examenEscogido.setNotaFinal(examenEscogido.calcularNotaFinal());
                     enviarExamenMulticast(examenEscogido);
+                    informeExamenes.addToHistorial(examenEscogido);
+                    informeExamenes.guardarHistorial();
+                    informeExamenes.cargarHistorial();
+                    gui.getpInformesIzquierda().updateUI();
                     System.out.println("Fin del examen");
 
                 }
@@ -112,20 +123,6 @@ public class ControladorServidor {
         for (int i = 0; i < informeExamenes.getExamenes().size(); i++)
             nombreExamenes[i] = informeExamenes.getExamenes().get(i).getNombre();
         return nombreExamenes;
-    }
-
-    public static boolean examenTerminado() {
-        if (examenEscogido.estaTerminado() || (minutosRestantes == 0 && segundosRestantes == 0)) {
-            examenEscogido.setFinExamen(true);
-            examenEscogido.calcularNotaFinal();
-            enviarExamenMulticast(examenEscogido);
-            informeExamenes.addToHistorial(examenEscogido);
-            informeExamenes.guardarHistorial();
-            informeExamenes.cargarHistorial();
-
-            return true;
-        }
-        return false;
     }
 
     public static Examen getExamenByName(String nombreExamen) {
