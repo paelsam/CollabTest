@@ -7,7 +7,8 @@ public class Pregunta implements Serializable {
 
     private static final long serialVersionUID = 8799656478674716639L;
 
-    private final String[] estados = { "LIBRE", "OCUPADA", "RESPONDIDA" };
+
+    private final String[] estados = {"LIBRE", "OCUPADA", "RESPONDIDA"};
 
     private final String enunciado;
     private List<String> listaOpciones;
@@ -16,6 +17,7 @@ public class Pregunta implements Serializable {
     private int estado;
     private String respondidoPor;
     private boolean esCorrecta;
+    private String opcionEscogida;
 
     public Pregunta(String enunciado, List<String> listadoOpciones, String opcionCorrecta, String descripcion) {
         this.enunciado = enunciado;
@@ -67,6 +69,10 @@ public class Pregunta implements Serializable {
         this.respondidoPor = respondidoPor;
     }
 
+    public void setOpcionEscogida(String opcionEscogida) {
+        this.opcionEscogida = opcionEscogida;
+    }
+
     public boolean getEsCorrecta() {
         return this.esCorrecta;
     }
@@ -76,19 +82,19 @@ public class Pregunta implements Serializable {
     }
 
     public boolean verificarOpcion(String opcion) {
-        if (opcionCorrecta.trim().equals(opcion))
+        if ( opcionCorrecta.trim().equals(opcion) )
             return true;
         return false;
     }
 
     public String toString() {
-        return "Enunciado: " + this.enunciado.trim() + "\n"
-                + "Descripción: " + this.descripcion + "\n"
-                + "Opciones: " + this.listaOpciones + "\n"
-                + "Opción correcta: " + this.opcionCorrecta + "\n"
-                + "Es Correcta?: " + this.esCorrecta + "\n"
-                + "Estado preginta: " + this.getEstado() + "\n";
-
+        return "Enunciado: " + this.enunciado.trim() + "\n" 
+        + "Descripción: " + this.descripcion + "\n"
+        + "Opciones: " + this.listaOpciones + "\n"
+        + "Opción correcta: " + this.opcionCorrecta + "\n"
+        + "Opción escogida: " + this.opcionEscogida + "\n"
+        + "Es Correcta: " + this.esCorrecta + "\n"
+        + "Estado: " + this.getEstado();
     }
 
 }

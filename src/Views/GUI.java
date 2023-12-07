@@ -196,6 +196,8 @@ public class GUI extends JFrame {
         lTiempoRestanteText.setFont(new Font("Arial", Font.BOLD, 14));
         lTiempoRestante = new JLabel("00:00");
         lTiempoRestante.setFont(new Font("Arial", Font.BOLD, 24));
+        lTiempoRestante.setPreferredSize(new Dimension(180, 20));
+        lTiempoRestante.setHorizontalAlignment(SwingConstants.CENTER);
         lTiempoRestante.setForeground(blanco);
         lTiempoRestanteText.setForeground(blanco);
 

@@ -140,7 +140,7 @@ public class ControladorServidor {
     }
 
     public static void iniciarExamen(String nombreExamen) {
-        if (servidor.getEstudiantes().size() >= 3) {
+        if (servidor.getEstudiantes().size() >= 1) {
             examenEscogido = getExamenByName(nombreExamen);
             iniciarCuentaRegresiva(examenEscogido.getTiempoDuracion());
             enviarExamenMulticast(examenEscogido);
